@@ -1,0 +1,18 @@
+<!doctypehtml>
+<html ng-app="firstApp">
+	<head>
+		<title>My First Angular App</title>
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body>
+		<section ng-controller="firstController">
+			<label>Name: </label>
+			<input ng-model="first">
+			<input ng-model="last">
+			<button type="button" ng-click="updateMsg()">Show Message</button>
+			<h2>{{heading+msg}}</h2>
+		</section>
+		<script src="js/lib/angular/angular.min.js"></script>
+		<script src="js/first.js"></script>
+	</body>
+</html>
