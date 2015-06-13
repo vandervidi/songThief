@@ -1,20 +1,27 @@
 var express = require('express');
 var dao = require('./dao');
 var app = express();
+app.use('/', express.static('./public')).listen(process.env.PORT || 3000);
+app.use(function(req,res,next){
+	//Setting headers for external requests
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Header", "Origin, X-Requested-With,Content-Type, Accept");
+	res.set("Content-Type", "application/json");
+	next();
+});
 
-// var mongoose = require('mongoose');
-// mongoose.connect('mongodb://ofir:1234@ds043991.mongolab.com:43991/db_ringapp');
+app.get('/songsIStole' , function(req, res){
+	// set response status to 200 and return data as a json format
+	res.status(200).json(dao.getSongsIStole);
+});
 
-// var conn = mongoose.connection;
+app.get('/songsStolenFromMe' , function(req, res){
+	// set response status to 200 and return data as a json format
+	res.status(200).json(dao.songsStolenFromMe);
+});
 
-// conn.on('error', function (err) {
-// 	console.log('connection error '+err);
-// });
-// conn.once('open', function () {
-// 	console.log('connected.');
+app.get('/connect' , function(req, res){
+	// set response status to 200 and return data as a json format
+	res.status(200).json(dao.connect);
+});
 
-// 	mongoose.disconnect();
-// });
-
-
-app.use('/', express.static('./public')).listen(8080);

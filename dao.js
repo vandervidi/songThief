@@ -5,20 +5,38 @@ mongoose.connect('mongodb://admin:1234@ds043942.mongolab.com:43942/songthief');
 var usersSchema = require('./usersSchema').usersSchema;
 //configure the imported schema as a model and give it an alias
 mongoose.model('UsersM' , usersSchema);
-
-
-
 var conn = mongoose.connection;
+
+
 //Print error message 
 conn.on('error', function(err){
 	console.log('connection error:' + err);
 });
 
+
+//This function connects to the database and returns a list of songs a user stole from his friends
+exports.getSongsIStole = function(username){
+	
+		return data;
+};
+
+//This function connects to the database and returns a list of songs stolen from a user
+exports.songsStolenFromMe = function(username){
+	
+		return data;
+};
+
+//This function connects to the database and checks if the credentials the user supplied
+//are valid.
+exports.connect = function(username , password){
+	
+		return data;
+};
+
 //once a connection is initiated - do the following
 conn.once('open' , function(){
 	console.log('connected');
 	var User = this.model('UsersM');
-
 	var query = User.find();
 	query.where('status').in('D');
 
@@ -28,18 +46,19 @@ conn.once('open' , function(){
 		}
 	});
 
+
 	//--------Inserting into database -------
 	//Step 1: Create a new model
-	var newUser = new User({
-		name : "Nimrod",
-		age: 20,
-		status: "D",
-		groups: ["sport", "TV", "books"]
-	});
+// 	var newUser = new User({
+// 		name : "Nimrod",
+// 		age: 20,
+// 		status: "D",
+// 		groups: ["sport", "TV", "books"]
+// 	});
 
-	newUser.save(function(err, doc){
-			console.log("saved- " + doc);	
-	});
+// 	newUser.save(function(err, doc){
+// 			console.log("saved- " + doc);	
+// 	});
 });
 
 //When the node preocess is terminated (Ctrl+c is pressed) , close the connection to the DB.

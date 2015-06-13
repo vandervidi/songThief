@@ -9,6 +9,7 @@
   "author": "Ofir Aghai",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.12.4"
+    "express": "^4.12.4",
+    "mongoose": "^4.0.5"
   }
 }
