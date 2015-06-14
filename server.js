@@ -34,13 +34,12 @@ app.post('/songsIStole' , function(req, res){
 	}
 });
 
-app.get('/songsStolenFromMe' , function(req, res){
+app.get('/getSongsStolenFromMe' , function(req, res){
 	// set response status to 200 and return data as a json format
 	res.status(200).json(dao.songsStolenFromMe());
 });
 
-app.post('/connect' , function(req, res){
-	// set response status to 200 and return data as a json format
-	res.status(200).json(dao.connect(req.body.username, req.body.password));
+app.post('/connect' , dao.connect ,function(req, res){
+	
 });
 
