@@ -16,20 +16,36 @@ conn.on('error', function(err){
 
 
 //This function connects to the database and returns a list of songs a user stole from his friends
-exports.getSongsIStole = function(username){
-	console.log('getSongsIStole/'+username);
-
+exports.getSongsIStole = function(req,res){
+	var user = req.body.username.toLowerCase();
+	console.log('getSongsIStole -> '+user);
+	
 	// find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-	return UserM.findOne({ 'username' : username }, 'mySteal', function (err, user) {
-	  if (err) return handleError(err);
-	  return user.mySteal;
+	UserM.findOne({ 'username' : user }, 'mySteal', function (err, doc) {
+		if (err) return handleError(err);
+		console.log(doc.mySteal);
+		res.json(doc.mySteal);
 	});
 };
 
 //This function connects to the database and returns a list of songs stolen from a user
-exports.songsStolenFromMe = function(username){
-		var data = [];
-		return data;
+exports.getSongsStolenFromMe = function(req, res){
+	// find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
+	var user = req.body.username.toLowerCase();
+	console.log('getSongsStolenFromMe -> '+user);
+
+	UserM.findOne({ 'username' : user }, 'mySongs', function (err, doc) {
+		if (err) return handleError(err);
+
+		var songsStealed = [];
+		for (var i=0; i<doc.mySongs.length; i++){
+			//console.log(doc.mySongs[i])
+			if (doc.mySongs[i].stolen){
+				songsStealed.push(doc.mySongs[i]);
+			}
+		}
+		res.json(songsStealed);
+	});
 };
 
 //This function connects to the database and checks if the credentials the user supplied
@@ -62,3 +78,12 @@ process.on('SIGINT', function() {
     process.exit(0);
   });
 });
+
+
+
+// return UserM.find().where('username').equals(user)
+	// .exec(function(err, docs){
+	// 		for(i in docs){
+	// 			return docs[i];
+	// 		}
+	// 	});
