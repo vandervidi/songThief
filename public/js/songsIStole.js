@@ -1,6 +1,6 @@
 var username = localStorage.getItem("username");
 $(document).ready(function() {
-
+	debugger;
 	$.ajax({
 			type : "POST",
 			url : 'https://songthief.herokuapp.com/songsIStole',
@@ -8,8 +8,11 @@ $(document).ready(function() {
 				username : username
 			},
 			success : function(data) {
+				debugger;
 				console.log(data);
-				debugger
+				$.each(data, function(key,value){
+					$('#data').append('<section>'+value.artist+' - '+value.songName+'</section>');
+				});
 				
 
 			},
