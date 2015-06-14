@@ -1,0 +1,12 @@
+h2 {
+	text-align: center;
+}
+
+#data{
+	margin: 0 auto;
+	width: 400px;
+}
+
+#data > section {
+	padding: 10px;
+}
