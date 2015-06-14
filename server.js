@@ -8,6 +8,7 @@ app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
+
 app.use(function(req,res,next){
 	//Setting headers for external requests
 	res.header("Access-Control-Allow-Origin", "*");
@@ -18,17 +19,13 @@ app.use(function(req,res,next){
 
 
 app.post('/songsIStole', dao.getSongsIStole, function(req, res){
-	//console.log('/songsIStole ->' +req.body.username.toLowerCase());
-	//res.json(dao.getSongsIStole(req.body.username.toLowerCase()));
 });
 
 
 app.post('/songsStolenFromMe', dao.getSongsStolenFromMe, function(req, res){
-
 });
 
 
 app.post('/connect' , dao.connect ,function(req, res){
-	
 });
 

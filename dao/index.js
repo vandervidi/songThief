@@ -17,12 +17,10 @@ conn.on('error', function(err){
 //This function connects to the database and returns a list of songs a user stole from his friends
 exports.getSongsIStole = function(req,res){
 	var user = req.body.username.toLowerCase();
-	console.log('getSongsIStole -> '+user);
 	
 	// find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
 	UserM.findOne({ 'username' : user }, 'mySteal', function (err, doc) {
 		if (err) return handleError(err);
-		console.log(doc.mySteal);
 		res.json(doc.mySteal);
 	});
 };
@@ -31,7 +29,6 @@ exports.getSongsIStole = function(req,res){
 exports.getSongsStolenFromMe = function(req, res){
 	// find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
 	var user = req.body.username.toLowerCase();
-	console.log('getSongsStolenFromMe -> '+user);
 
 	UserM.findOne({ 'username' : user }, 'mySongs', function (err, doc) {
 		if (err) return handleError(err);
@@ -74,9 +71,3 @@ process.on('SIGINT', function() {
   });
 });
 
-// return UserM.find().where('username').equals(user)
-	// .exec(function(err, docs){
-	// 		for(i in docs){
-	// 			return docs[i];
-	// 		}
-	// 	});
