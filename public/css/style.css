@@ -8,6 +8,8 @@ h2 {
 }
 
 #data > section {
+	border: 1px solid #000;
+	margin-top: 10px;
 	padding: 10px;
 <<<<<<< HEAD
 =======
@@ -15,6 +17,7 @@ h2 {
 }
 
 .center{
+	margin-top: 10px;
 	text-align: center;
 >>>>>>> e6e6b70a259239d83a72103cc4883b1e700107f7
 }
