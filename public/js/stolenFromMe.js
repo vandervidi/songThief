@@ -1,15 +1,16 @@
 var username = localStorage.getItem("username");
 $(document).ready(function() {
+
 	$.ajax({
 			type : "POST",
-			url : 'https://songthief.herokuapp.com/songsIStole',
+			url : 'https://songthief.herokuapp.com/songsStolenFromMe',
 			data : {
 				username : username
 			},
 			success : function(data) {
-				console.log(data);
+				debugger
 				$.each(data, function(key,value){
-					$('#data').append('<section>'+value.artist+' - '+value.songName+'</section>');
+					$("#data").append("<section>" + value.artist + " - "+ value.songName + "</section>");
 				});
 				
 
@@ -18,6 +19,4 @@ $(document).ready(function() {
 				console.log("Cannot get followd users Json");
 			}
 		});
-
-	});
 });	
