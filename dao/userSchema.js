@@ -16,8 +16,8 @@ var userSchema = new schema({
 		url: {type: String, unique: 1, required: true},
 		songName: String,
 		artist: String,
-		timestamp: Number,
-		userName: String	
+		stealTimestamp: Number,
+		username: String	
 	}],
 }, {collection: 'users'});
 

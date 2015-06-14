@@ -11,7 +11,6 @@ $(document).ready(function() {
 			},
 			success : function(data) {
 				console.log(data);
-				debugger
 				if(data.connection == 1){
 					localStorage.setItem("username", $("#user").val());
 					window.location.href = "songsIStole.html";

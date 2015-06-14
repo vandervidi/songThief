@@ -8,12 +8,9 @@ $(document).ready(function() {
 				username : username
 			},
 			success : function(data) {
-				debugger
 				$.each(data, function(key,value){
 					$("#data").append("<section>" + value.artist + " - "+ value.songName + "</section>");
 				});
-				
-
 			},
 			error : function(objRequest, errortype) {
 				console.log("Cannot get followd users Json");
