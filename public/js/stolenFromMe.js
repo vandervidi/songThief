@@ -3,22 +3,20 @@ $(document).ready(function() {
 
 	$.ajax({
 			type : "POST",
-			url : 'https://songthief.herokuapp.com/songsIStole',
+			url : 'https://songthief.herokuapp.com/songsStolenFromMe',
 			data : {
-				username : username,
+				username : username
 			},
 			success : function(data) {
-				console.log(data);
 				debugger
 				$.each(data, function(key,value){
 					$("#data").append("<section>" + value.artist + " - "+ value.songName + "</section>");
 				});
-								
+				
 
 			},
 			error : function(objRequest, errortype) {
 				console.log("Cannot get followd users Json");
 			}
 		});
-
-	});
+});	
