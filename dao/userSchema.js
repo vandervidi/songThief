@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
-var usersSchema = new schema({
+var userSchema = new schema({
 	userName: {type: String, index: 1, unique: 1, required: true},
 	password: {type: String, required: true},
 	fullName: String,
-	needShowMessage: boolean,
+	needShowMessage: Boolean,
 	mySongs: [{
 		url: {type: String, unique: 1, required: true},
 		songName: String,
@@ -21,4 +21,4 @@ var usersSchema = new schema({
 	}],
 }, {collection: 'users'});
 
-exports.usersSchema = usersSchema;
+exports.userSchema = userSchema;

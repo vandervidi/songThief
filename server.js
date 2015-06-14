@@ -2,6 +2,7 @@ var express = require('express');
 var dao = require('./dao');
 var app = express();
 app.use('/', express.static('./public')).listen(process.env.PORT || 3000);
+
 app.use(function(req,res,next){
 	//Setting headers for external requests
 	res.header("Access-Control-Allow-Origin", "*");
@@ -12,12 +13,12 @@ app.use(function(req,res,next){
 
 app.get('/songsIStole' , function(req, res){
 	// set response status to 200 and return data as a json format
-	res.status(200).json(dao.getSongsIStole);
+	res.status(200).json(dao.getSongsIStole('yeal_raz'));
 });
 
 app.get('/songsStolenFromMe' , function(req, res){
 	// set response status to 200 and return data as a json format
-	res.status(200).json(dao.songsStolenFromMe);
+	res.status(200).json(dao.songsStolenFromMe());
 });
 
 app.get('/connect' , function(req, res){

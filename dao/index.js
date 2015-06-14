@@ -2,9 +2,10 @@ var mongoose = require('mongoose');
 //configuring connection to mongoLab
 mongoose.connect('mongodb://admin:1234@ds043942.mongolab.com:43942/songthief');
 //import schema module
-var usersSchema = require('./usersSchema').usersSchema;
+var userSchema = require('./userSchema').userSchema;
 //configure the imported schema as a model and give it an alias
-mongoose.model('UsersM' , usersSchema);
+mongoose.model('UsersM' , userSchema);
+var UserM;
 var conn = mongoose.connection;
 
 
@@ -16,35 +17,56 @@ conn.on('error', function(err){
 
 //This function connects to the database and returns a list of songs a user stole from his friends
 exports.getSongsIStole = function(username){
+	console.log('getSongsIStole/'+username);
+
+	// find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
+	UserM.findOne({ 'userName' : username }, 'name occupation', function (err, user) {
+	  if (err) return handleError(err);
+	  var data = {
+	  	user: user.password,
+	  	pass: user.mySteal
+	  }
+	  return data;
+	});
 	
-		return data;
+	//.findOne()
+	// //.where('userName')
+	// //.equals(username)
+	// //.select('name occupation')
+	// .exec(function(err, docs){
+	// 	for(i in docs){
+	// 			console.log(JSON.stringify(docs[i]));
+	// 	}
+
+	// });
 };
 
 //This function connects to the database and returns a list of songs stolen from a user
 exports.songsStolenFromMe = function(username){
-	
+		var data = [];
 		return data;
 };
 
 //This function connects to the database and checks if the credentials the user supplied
 //are valid.
 exports.connect = function(username , password){
-	
+	var data = [];
 		return data;
 };
 
 //once a connection is initiated - do the following
 conn.once('open' , function(){
 	console.log('connected');
-	var User = this.model('UsersM');
-	var query = User.find();
-	query.where('status').in('D');
+	UserM = this.model('UsersM');
 
-	query.exec(function(err, docs){
-		for(i in docs){
-				console.log(JSON.stringify(docs[i]));
-		}
-	});
+	// var query = User.find();
+	// query.where('').in('D');
+
+	// query.exec(function(err, docs){
+	// 	for(i in docs){
+	// 			console.log(JSON.stringify(docs[i]));
+	// 	}
+	// });
 
 
 	//--------Inserting into database -------
