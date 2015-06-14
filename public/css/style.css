@@ -9,4 +9,9 @@ h2 {
 
 #data > section {
 	padding: 10px;
+	text-align: center;
+}
+
+.center{
+	text-align: center;
 }

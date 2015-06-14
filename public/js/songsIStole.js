@@ -9,7 +9,6 @@ $(document).ready(function() {
 			},
 			success : function(data) {
 				console.log(data);
-				debugger
 				$.each(data, function(key,value){
 					$("#data").append("<section>" + value.artist + " - "+ value.songName + "</section>");
 				});
