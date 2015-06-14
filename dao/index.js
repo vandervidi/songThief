@@ -4,7 +4,7 @@ mongoose.connect('mongodb://admin:1234@ds043942.mongolab.com:43942/songthief');
 //import schema module
 var userSchema = require('./userSchema').userSchema;
 //configure the imported schema as a model and give it an alias
-mongoose.model('UsersM' , userSchema);
+mongoose.model('UserM' , userSchema);
 var UserM;
 var conn = mongoose.connection;
 
@@ -20,25 +20,11 @@ exports.getSongsIStole = function(username){
 	console.log('getSongsIStole/'+username);
 
 	// find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
-	UserM.findOne({ 'userName' : username }, 'name occupation', function (err, user) {
+	return UserM.findOne({ 'username' : username }, 'mySteal', function (err, user) {
 	  if (err) return handleError(err);
-	  var data = {
-	  	user: user.password,
-	  	pass: user.mySteal
-	  }
-	  return data;
+	  return user.mySteal;
 	});
-	
-	//.findOne()
-	// //.where('userName')
-	// //.equals(username)
-	// //.select('name occupation')
-	// .exec(function(err, docs){
-	// 	for(i in docs){
-	// 			console.log(JSON.stringify(docs[i]));
-	// 	}
-
-	// });
+	//console.log(data);
 };
 
 //This function connects to the database and returns a list of songs stolen from a user
@@ -57,7 +43,7 @@ exports.connect = function(username , password){
 //once a connection is initiated - do the following
 conn.once('open' , function(){
 	console.log('connected');
-	UserM = this.model('UsersM');
+	UserM = this.model('UserM');
 
 	// var query = User.find();
 	// query.where('').in('D');
@@ -92,6 +78,26 @@ process.on('SIGINT', function() {
 });
 
 
+
+// var query = UserM.find();
+	// query.where('').in('D');
+
+	// query.exec(function(err, docs){
+	// 	for(i in docs){
+	// 			console.log(JSON.stringify(docs[i]));
+	// 	}
+	// });
+
+	// UserM.findOne()
+	// .where('userName')
+	// //.equals(username)
+	// //.select('name occupation')
+	// .exec(function(err, docs){
+	// 	for(i in docs){
+	// 			console.log(JSON.stringify(docs[i]));
+	// 	}
+
+	// });
 
 
 

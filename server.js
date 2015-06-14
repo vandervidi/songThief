@@ -1,5 +1,6 @@
 var express = require('express');
 var dao = require('./dao');
+var url = require('url');
 var app = express();
 app.use('/', express.static('./public')).listen(process.env.PORT || 3000);
 
@@ -11,9 +12,22 @@ app.use(function(req,res,next){
 	next();
 });
 
-app.get('/songsIStole' , function(req, res){
-	// set response status to 200 and return data as a json format
-	res.status(200).json(dao.getSongsIStole('yeal_raz'));
+app.post('/songsIStole' , function(req, res){
+	console.log(req.body.username);
+	console.log('/songsIStole');
+	// Get month param
+	if (query.username != null){
+		console.log(query.username);
+		var mySteal = dao.getSongsIStole(query.username.toLowerCase());
+		console.log(mySteal);
+		if (mySteal!= null){
+			res.json({d:1});
+		}else{
+			res.status(200).send({'error':'no result'});
+		}
+	}else{
+		res.status(200).send({'error':'make sure you send "username" as param'});
+	}
 });
 
 app.get('/songsStolenFromMe' , function(req, res){
@@ -21,7 +35,7 @@ app.get('/songsStolenFromMe' , function(req, res){
 	res.status(200).json(dao.songsStolenFromMe());
 });
 
-app.get('/connect' , function(req, res){
+app.post('/connect' , function(req, res){
 	// set response status to 200 and return data as a json format
 	res.status(200).json(dao.connect);
 });
