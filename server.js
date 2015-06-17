@@ -29,3 +29,4 @@ app.post('/songsStolenFromMe', dao.getSongsStolenFromMe, function(req, res){
 app.post('/connect' , dao.connect ,function(req, res){
 });
 
+console.log('listening on port '+3000);
