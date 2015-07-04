@@ -28,20 +28,30 @@
 //
 // });
 // });
-$(document).ready(function() {
-  $.ajaxSetup({ cache: true });
-  $.getScript('//connect.facebook.net/en_US/sdk.js', function(){
-    FB.init({
-      appId: '1422789871382202',
-      version: 'v2.3' // or v2.0, v2.1, v2.0
-    });     
-    $('#loginbutton,#feedbutton').removeAttr('disabled');
-    FB.getLoginStatus(updateStatusCallback);
-  });
+jQuery.fbInit = function(app_id) {
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : app_id, // App ID
+            status     : true, // check login status
+            cookie     : true, // enable cookies to allow the server to access the session
+            xfbml      : true  // parse XFBML
+        });
+    };
+
+    // Load the SDK Asynchronously
+    (function(d){
+        var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+        js = d.createElement('script'); js.id = id; js.async = true;
+        js.src = "//connect.facebook.net/en_US/all.js";
+        d.getElementsByTagName('head')[0].appendChild(js);
+    }(document));
+
+    $('<div />').attr('id','fb-root').appendTo('body');
+};
+
+$(document).ready(function(){
+    $.fbInit('1422789871382202');
 });
-		
-		function updateStatusCallback(){
-   alert('Status updated!!');
-   // Your logic here
-}
+      //appId: '1422789871382202',
+      
 			
