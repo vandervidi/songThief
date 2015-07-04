@@ -1,51 +1,49 @@
 @font-face {
-    font-family: NexaBold;
-    src: url("../fonts/nexa/Nexa Bold.otf");
+	font-family: NexaBold;
+	src: url("../fonts/nexa/Nexa Bold.otf");
 }
 
 @font-face {
-    font-family: NexaLight;
-    src: url("../fonts/nexa/Nexa Light.otf");
+	font-family: NexaLight;
+	src: url("../fonts/nexa/Nexa Light.otf");
 }
 
-
-#wrapper{
+#wrapper {
 	width: 375px;
 	height: 597px;
 	background: #303344;
 }
 
-#logoHolder{
- padding-top: 120px;
- text-align: center;	
- color: #FFFFFF;
+#logoHolder {
+	padding-top: 120px;
+	text-align: center;
+	color: #FFFFFF;
 }
 
-#logoLeft{
+#logoLeft {
 	font-size: 42px;
 	font-family: NexaBold;
 	text-transform: uppercase;
 }
 
-#logoRight{
+#logoRight {
 	font-size: 42px;
 	font-family: NexaLight;
 	text-transform: uppercase;
 }
 
-#logoBottom{
+#logoBottom {
 	font-size: 27px;
 	font-family: NexaLight;
 	text-transform: lowercase;
 }
 
-#logoChest img{
+#logoChest img {
 	height: 150px;
 	margin: 60px 0 0 40px;;
 }
 
-
-#loginbutton{
+#loginbutton {
 	position: absolute;
 	bottom: 0px;
 	font-family: NexaBold;

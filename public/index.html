@@ -17,17 +17,19 @@
 				});
 
 				FB.getLoginStatus(function(response) {
+					//If the user is already logged in from a previous session  - redirect him to the next page
 					if (response.status === 'connected') {
 						console.log('Logged in.');
 						console.log(response);
+						window.location.href = "nearFreinds.html";
 										
 					}
 				});
 
 				$("#loginbutton").click(function() {
-					console.log("clicked");
+					console.log("clicked connect button");
 					FB.login();
-
+					window.location.href = "nearFreinds.html";
 				});
 			}; ( function(d, s, id) {
 					var js,
