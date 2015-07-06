@@ -1,0 +1,75 @@
+@font-face {
+	font-family: NexaBold;
+	src: url("../fonts/nexa/Nexa Bold.otf");
+}
+
+@font-face {
+	font-family: NexaLight;
+	src: url("../fonts/nexa/Nexa Light.otf");
+}
+
+html, body, #gMap {
+	height: 100%;
+	margin: 0px;
+	padding: 0px
+}
+
+#wrapper {
+	position: relative;
+	width: 375px;
+	height: 597px;
+	background: #303344;
+}
+
+#appNavigator {
+	display: table;
+	width: 375px;
+	background: #2cf0b9;
+	height: 53px;
+	text-align: center;
+}
+
+#logoLeft {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 18px;
+	font-family: NexaBold;
+	text-transform: uppercase;
+	text-align: right;
+}
+
+#logoRight {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 18px;
+	font-family: NexaLight;
+	text-transform: uppercase;
+	text-align: left;
+}
+
+#ttrText{
+	margin-top: 118px;
+	text-align: center;
+	font-size: 18px;
+	color: #FFF;
+	text-transform: uppercase;
+	font-family: NexaLight;
+}
+
+#animation{
+	margin: 0 auto;
+	width: 110px;
+	height: 200px;
+	background: url("../images/running.gif") no-repeat center;
+	background-size: 240px 200px;
+	padding-bottom: 30px;
+	border-bottom: 7.5px solid #00ffff;
+}
+
+#bottomText{
+	font-family: NexaBold;
+	font-size: 14px;
+	color: #FFF;
+	text-align: center;
+	margin-top: 110px;
+}
