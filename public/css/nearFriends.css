@@ -1,42 +1,117 @@
+@font-face {
+	font-family: NexaBold;
+	src: url("../fonts/nexa/Nexa Bold.otf");
+}
+
+@font-face {
+	font-family: NexaLight;
+	src: url("../fonts/nexa/Nexa Light.otf");
+}
+
 html, body, #gMap {
 	height: 100%;
 	margin: 0px;
 	padding: 0px
 }
+
 #wrapper {
+	position: relative;
 	width: 375px;
 	height: 597px;
 	background: #303344;
 }
 
-#gMap {
-	height: 500px;
+#appNavigator {
+	display: table;
+	width: 375px;
+	background: #2cf0b9;
+	height: 53px;
+	text-align: center;
 }
 
-#gMapOverlay {
-	position: absolute;
-	top: 0px;
-	left: 0px;
+#logoLeft {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 18px;
+	font-family: NexaBold;
+	text-transform: uppercase;
+	text-align: right;
+}
+
+#logoRight {
+	display: table-cell;
+	vertical-align: middle;
+	font-size: 18px;
+	font-family: NexaLight;
+	text-transform: uppercase;
+	text-align: left;
+}
+
+#gMap {
+	height: 467px;
+	/*visibility: hidden;*/
+}
+
+#mapOverlay {
 	width: 375px;
-	height: 500px;
+	height: 467px;
+	position: absolute;
 	background: #303344;
-	z-index: 999;
+	top: 53px;
 }
 
 #droppableChest {
-	height: 100px;
+	height: 77px;
 	width: 375px;
-	background: #303344;
+}
+
+#chestHolder {
+	height: 77px;
+	width: 100px;
+	margin: 0 auto;
+}
+
+.droppableStatic {
+	background: url("../images/box1.png") no-repeat center #303344;
+	background-size: contain;
+}
+
+.droppableGlowingChest {
+	background: url("../images/box_glow1.png") no-repeat center #303344;
+	background-size: contain;
+}
+
+.droppableObjectOverChest {
+	background: url("../images/box_open1.png") no-repeat center #303344;
+	background-size: contain;
+}
+
+.droppableChestAfterUserDropped {
+	background: url("../images/box_closed1.png") no-repeat center #303344;
+	background-size: contain;
+}
+
+#test {
+	position: absolute;
+	top: 249px;
+	left: 187px;
+	width: 30px;
+	height: 30px;
+	background: yellow;
 }
 
 /* START of removing google banner and other stuff - Yes we know its illegal. */
-a[href^="http://maps.google.com/maps"]{display:none !important}
-a[href^="https://maps.google.com/maps"]{display:none !important}
+a[href^="http://maps.google.com/maps"] {
+	display: none !important
+}
+a[href^="https://maps.google.com/maps"] {
+	display: none !important
+}
 
 .gmnoprint a, .gmnoprint span, .gm-style-cc {
-    display:none;
+	display: none;
 }
 .gmnoprint div {
-    background:none !important;
+	background: none !important;
 }
 /* END of google style removal */
