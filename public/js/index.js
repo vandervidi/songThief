@@ -13,7 +13,6 @@ $(document).ready(function() {
 			if (response.status === 'connected') {
 				//Save connected user id
 				userFacebookId = response.authResponse.userID;
-				alert(userFacebookId);
 				console.log('Logged in.');
 				console.log(response);
 				getFriends();
@@ -22,28 +21,33 @@ $(document).ready(function() {
 			}
 		});
 
-//####
-function getFriends() {
-    FB.api("/" + userFacebookId + "/friendlists", function(response) {
-    	console.log(response);
-        if(response.data) {
-            $.each(response.data,function(index,friend) {
-                alert(friend.name + ' has id:' + friend.id);
-            });
-        } else {
-            alert("Error!");
-        }
-    });
-}
-				//####
+		//####
+		function getFriends() {
+			FB.api('/me/friends', function(response) {
+				console.log(response);
+				if (response.data) {
+					$.each(response.data, function(index, friend) {
+						alert(friend.name + ' has id:' + friend.id);
+					});
+				} else {
+					alert("Error!");
+				}
+			});
+		}
 
+		//####
 
 		$("#loginbutton").click(function() {
 			console.log("clicked connect button");
-			FB.login();
+			FB.login(function(response) {
+				// handle the response
+			}, {
+				scope : 'email,user_friends'
+			});
 			//window.location.href = "nearFriends.html";
 		});
-	}; ( function(d, s, id) {
+	};
+	( function(d, s, id) {
 			var js,
 			    fjs = d.getElementsByTagName(s)[0];
 			if (d.getElementById(id)) {
