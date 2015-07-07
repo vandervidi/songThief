@@ -1,6 +1,6 @@
 var map,
-    overlay;
-var userLocatinoOffset = 0.00008;
+    overlay,
+    userLocatinoOffset = 0.00008;
 //Offset to present user location at the bottom of the map instead of the center
 var mapCenter = {
 	lat : 32.0900000 + userLocatinoOffset,

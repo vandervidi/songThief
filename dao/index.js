@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+
 //configuring connection to mongoLab
 mongoose.connect('mongodb://admin:1234@ds043942.mongolab.com:43942/songthief');
 //import schema module
@@ -13,12 +14,10 @@ conn.on('error', function(err){
 	console.log('connection error:' + err);
 });
 
-
-//This function connects to the database and returns a list of songs a user stole from his friends
+//This function returns a list of songs a user stole from his friends
 exports.getSongsIStole = function(req,res){
 	var user = req.body.username.toLowerCase();
 	
-	// find each person with a last name matching 'Ghost', selecting the `name` and `occupation` fields
 	UserM.findOne({ 'username' : user }, 'mySteal', function (err, doc) {
 		if (err) return handleError(err);
 		res.json(doc.mySteal);
@@ -63,7 +62,7 @@ conn.once('open' , function(){
 	UserM = this.model('UserM');
 });
 
-//When the node preocess is terminated (Ctrl+c is pressed) , close the connection to the DB.
+//When the node process is terminated (Ctrl+c is pressed) , close the connection to the DB.
 process.on('SIGINT', function() {
   mongoose.connection.close(function () {
     console.log('Mongoose disconnected on app termination');
