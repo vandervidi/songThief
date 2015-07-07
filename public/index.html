@@ -5,43 +5,11 @@
 		<link rel="stylesheet" href="css/reset.css">
 		<link rel="stylesheet" href="css/index.css">
 		<script src="js/jquery/jquery-2.1.4.min.js"></script>
-		<script src="js/connect.js"></script>
+		<script src="js/index.js"></script>
 	</head>
 	<body>
 		<script>
-			window.fbAsyncInit = function() {
-				FB.init({
-					appId : '1422789871382202',
-					xfbml : true,
-					version : 'v2.3'
-				});
-
-				FB.getLoginStatus(function(response) {
-					//If the user is already logged in from a previous session  - redirect him to the next page
-					if (response.status === 'connected') {
-						console.log('Logged in.');
-						console.log(response);
-						//window.location.href = "nearFriends.html";
-										
-					}
-				});
-
-				$("#loginbutton").click(function() {
-					console.log("clicked connect button");
-					FB.login();
-					//window.location.href = "nearFriends.html";
-				});
-			}; ( function(d, s, id) {
-					var js,
-					    fjs = d.getElementsByTagName(s)[0];
-					if (d.getElementById(id)) {
-						return;
-					}
-					js = d.createElement(s);
-					js.id = id;
-					js.src = "//connect.facebook.net/en_US/sdk.js";
-					fjs.parentNode.insertBefore(js, fjs);
-				}(document, 'script', 'facebook-jssdk'));
+			
 		</script>
 		<div id="wrapper">
 			<section id="logoHolder">
