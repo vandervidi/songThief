@@ -46,14 +46,57 @@ exports.getSongsStolenFromMe = function(req, res){
 //This function connects to the database and checks if the credentials the user supplied
 //are valid.
 exports.connect = function(req,res){
-	var query = UserM.find().and([{ username: req.body.username }, { password: req.body.password }])
-	.exec(function(err, docs){
-			if (err) return res.json({connection: 2});
-			if (docs.length)		
-				 res.json({connection: 1});
-			else
-				 res.json({connection: 0});
-		});
+	console.log('connect()');
+
+	UserM.findOne({ userId: req.body.userId}, function (err, doc){
+		if (err) return res.json({success: 0});
+		if (!!doc){
+			//the user exists then modify friends list
+			UserM.update(
+				{ 
+					userid: req.body.userId, 
+					profilePic: req.body.profilePic
+				},
+				{friends:req.body.friendsList},
+				function callback (err, numAffected) {
+					console.log(numAffected + " Users were affected");
+			  		// numAffected is the number of updated documents
+			  		if (err) return res.json({success: 0});
+			  		else{
+			  			res.json({success: 1});
+			  		}
+				}
+			);
+	 		
+	 	}else {
+	 		//else , create new user
+	 		//--------Inserting into database -------
+			//Step 1: Create a new model
+			console.log('creating new user');
+			var newUser = new UserM({
+				userId: req.body.userId,
+				profilePic: req.body.profilePic, 
+				needShowMessage: false,
+				//robbers: [],
+				location: {
+					lat: req.body.location.lat,
+					lng: req.body.location.lng
+				},
+				friends: req.body.friendsList
+				// mySongs: [],
+				// mySteal: [],
+			});
+
+			newUser.save(function(err, doc){
+				if (err) return res.json({success: 0});
+		  		else{
+		  			console.log("saved- " + doc);
+		  			res.json({success: 1});
+		  		}
+			});
+	  	}
+	});
+
 };
 
 //once a connection is initiated - do the following

@@ -1,5 +1,3 @@
-var userFacebookId;
-
 $(document).ready(function() {
 	window.fbAsyncInit = function() {
 		FB.init({
@@ -12,40 +10,80 @@ $(document).ready(function() {
 			//If the user is already logged in from a previous session  - redirect him to the next page
 			if (response.status === 'connected') {
 				//Save connected user id
-				userFacebookId = response.authResponse.userID;
-				console.log('Logged in.');
+				
 				console.log(response);
-				getFriends();
+				FB.api('/me/friends', function(resFriends) {
+				
+					console.log('get FB friends ', resFriends);
+					saveUserData(response.authResponse.userID, 'http://picture', resFriends.data);
+				});
 				//window.location.href = "nearFriends.html";
 
 			}
 		});
 
 		//####
-		function getFriends() {
-			FB.api('/me/friends', function(response) {
-				console.log(response);
-				if (response.data) {
-					$.each(response.data, function(index, friend) {
-						
-					});
-				} else {
-					alert("Error!");
+		$("#loginbutton").click(function() {
+			console.log("clicked connect button");
+			FB.login(function(response) {
+				// handle the response
+				
+				FB.api('/me/friends', function(resFriends) {
+				
+					console.log('get FB friends ', resFriends);
+					saveUserData(response.authResponse.userID, 'http://picture', resFriends.data);
+				});
+				
+			}, {
+				scope : 'user_friends'
+			});
+			//window.location.href = "nearFriends.html";
+		});
+
+		function saveUserData(userId, profilePic, friendsListFb ){
+			console.log("AJAX " ,friendsListFb);
+			// Create new friends list from response 'friendsList'
+			var friendsList = [];
+			$.each(friendsListFb, function(i, friend) { 
+				friendsList.push(friend.id);  
+			});
+			console.log('friendsList ',friendsList);
+
+			$.ajax({
+ 				type : "POST",
+ 				url : 'http://localhost:8020/connect',
+				data : {
+					userId: userId,
+					profilePic: profilePic,
+					friendsList: friendsList,
+					location: {
+						lat: 31.9743780,
+						lng: 34.7739330
+					}
+				},
+  				success : function(data) {
+ 					console.log('data: ',data);
+ 					if (data.success){
+ 						// redirect
+
+ 					}else {
+ 						// prompt msg to user on failure
+ 					}
+ 				},
+ 				error : function(objRequest, errortype) {
+					console.log("Cannot get followd users Json");
 				}
 			});
 		}
 
 		//####
-
-		$("#loginbutton").click(function() {
-			console.log("clicked connect button");
-			FB.login(function(response) {
-				// handle the response
-			}, {
-				scope : 'email,user_friends'
-			});
-			//window.location.href = "nearFriends.html";
-		});
+		// function getFriends() {
+		// 	FB.api('/me/friends', function(response) {
+		// 		debugger;
+		// 		console.log('getFriends() ',response);
+		// 		return response.data;
+		// 	});
+		// }
 	};
 	( function(d, s, id) {
 			var js,
