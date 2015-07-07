@@ -27,7 +27,7 @@ $(document).ready(function() {
 				console.log(response);
 				if (response.data) {
 					$.each(response.data, function(index, friend) {
-						alert(friend.name + ' has id:' + friend.id);
+						
 					});
 				} else {
 					alert("Error!");
