@@ -23,7 +23,7 @@ $(document).ready(function() {
 
 		//####
 		function getFriends() {
-			FB.api('/me/friendlists ', function(response) {
+			FB.api('/me/friends', function(response) {
 				console.log(response);
 				if (response.data) {
 					$.each(response.data, function(index, friend) {
