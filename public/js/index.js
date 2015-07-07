@@ -9,37 +9,39 @@ $(document).ready(function() {
 		FB.getLoginStatus(function(response) {
 			//If the user is already logged in from a previous session  - redirect him to the next page
 			if (response.status === 'connected') {
-				//Save connected user id
-				
-				console.log(response);
-				FB.api('/me/friends', function(resFriends) {
-				
-					console.log('get FB friends ', resFriends);
-					saveUserData(response.authResponse.userID, 'http://picture', resFriends.data);
-				});
-				//window.location.href = "nearFriends.html";
-
+				getAllFbData(response);
 			}
 		});
 
 		//####
 		$("#loginbutton").click(function() {
 			console.log("clicked connect button");
+			/* Login */
 			FB.login(function(response) {
-				// handle the response
-				
-				FB.api('/me/friends', function(resFriends) {
-				
-					console.log('get FB friends ', resFriends);
-					saveUserData(response.authResponse.userID, 'http://picture', resFriends.data);
-				});
-				
+				getAllFbData(response);
 			}, {
 				scope : 'user_friends'
 			});
 			//window.location.href = "nearFriends.html";
 		});
 
+		function getAllFbData(response){
+			/* Get friends */
+			FB.api('/me/friends', function(resFriends) {
+				console.log('get FB friends ', resFriends);
+
+				/* Profile picture */
+				FB.api(
+				    '/'+response.authResponse.userID+'/picture',
+				    function (resProfilePic) {
+				    	if (response && !response.error) {
+				    		/* handle the result */
+				    		saveUserData(response.authResponse.userID, resProfilePic.data.url, resFriends.data);
+				      	}
+				    }
+				);
+			});
+		}
 		function saveUserData(userId, profilePic, friendsListFb ){
 			console.log("AJAX " ,friendsListFb);
 			// Create new friends list from response 'friendsList'
@@ -65,9 +67,10 @@ $(document).ready(function() {
  					console.log('data: ',data);
  					if (data.success){
  						// redirect
-
+ 						window.location.href = "nearFriends.html";
  					}else {
  						// prompt msg to user on failure
+ 						alert('We are sorry,\nthere is an error.');
  					}
  				},
  				error : function(objRequest, errortype) {
