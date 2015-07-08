@@ -5,7 +5,7 @@ var userSchema = new schema({
 	profilePic: String, 
 	needShowMessage: Boolean,
 	robbers: [{
-		userId: String
+		type: String, unique: 1
 	}],
 	location: {
 		lat: Number,

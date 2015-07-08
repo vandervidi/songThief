@@ -17,6 +17,8 @@ app.use(function(req,res,next){
 	next();
 });
 
+app.post('/connect' , dao.connect ,function(req, res){
+});
 
 app.post('/songsIStole', dao.getSongsIStole, function(req, res){
 });
@@ -26,7 +28,10 @@ app.post('/songsStolenFromMe', dao.getSongsStolenFromMe, function(req, res){
 });
 
 
-app.post('/connect' , dao.connect ,function(req, res){
+app.post('/getFriendsLocations', dao.getFriendsLocations, function(req, res){
+});
+
+app.post('/getRobbers', dao.getRobbers, function(req, res){
 });
 
 console.log('listening on port '+8020);
