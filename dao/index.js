@@ -45,24 +45,18 @@ exports.getSongsStolenFromMe = function(req, res){
 exports.getRobbers = function(req, res){
 	var robbersData = [];
 	UserM.findOne({ 'userId' : req.body.userId }, 'robbers', function (err, doc) {
-		console.log("getRobbers() ", doc);
 		if (err) return res.json({success: 0});
 
 //####
+// Find all robbers documents from the DB.
 UserM.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
 					if (err) return res.json({success: 0});
-					else{
-						console.log(robbersDoc)
-						for(var i = 0; i < doc.friends.length; i++){
-							responseData.push({
-								friendId: robbersDoc[i].userId,
-								profilePic: robbersDoc[i].profilePic,
-								location: {
-									lat: robbersDoc[i].location.lat,
-									lng: robbersDoc[i].location.lng 
-								}
-							});
-						}
+
+					for(var i = 0; i < doc.robbers.length; i++){
+						responseData.push({
+							robberId: robbersDoc[i].userId,
+							profilePic: robbersDoc[i].profilePic,
+						});
 					}
 					res.json({ success: 1, robbersData: responseData });
 				});
@@ -72,7 +66,7 @@ UserM.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
 
 
 
-		else res.json({success: 1, robbers: doc.robbers});
+		//else res.json({success: 1, robbers: doc.robbers});
 	});
 };
 
