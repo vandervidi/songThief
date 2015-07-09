@@ -32,7 +32,7 @@ function initialize() {
 
 		$.ajax({
 			type : "POST",
-			url : 'https://songthief.herokuapp.com/getFriendsLocations',
+			url : 'http://localhost:8020/getFriendsLocations',
 			data : {
 				userId : window.sessionStorage.id,
 			},

@@ -51,7 +51,7 @@ $(document).ready(function() {
 
 			$.ajax({
 				type : "POST",
-				url : 'https://songthief.herokuapp.com/connect',
+				url : 'http://localhost:8020/connect',
 				data : {
 					userId : userId,
 					profilePic : profilePic,

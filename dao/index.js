@@ -43,13 +43,12 @@ exports.getSongsStolenFromMe = function(req, res){
 
 // This function returns a user's robbers Facebook Id's
 exports.getRobbers = function(req, res){
-	var robbersData = [];
+	var responseData = [];
 	UserM.findOne({ 'userId' : req.body.userId }, 'robbers', function (err, doc) {
 		if (err) return res.json({success: 0});
 
-//####
 // Find all robbers documents from the DB.
-UserM.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
+	UserM.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
 					if (err) return res.json({success: 0});
 
 					for(var i = 0; i < doc.robbers.length; i++){
@@ -58,15 +57,12 @@ UserM.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
 							profilePic: robbersDoc[i].profilePic,
 						});
 					}
+					//
+					doc.needShowMessage = false;
+					doc.robbers = [];
+					doc.save();
 					res.json({ success: 1, robbersData: responseData });
 				});
-
-//#####
-
-
-
-
-		//else res.json({success: 1, robbers: doc.robbers});
 	});
 };
 

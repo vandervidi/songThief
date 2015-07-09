@@ -1,11 +1,8 @@
 var username = localStorage.getItem("username");
 $(document).ready(function() {
-	console.log('(Ajax) get songs i songsIStole...')
-	
-
 	$.ajax({
 		type : "POST",
-		url : 'https://songthief.herokuapp.com/songsIStole',
+		url : 'http://localhost:8020/songsIStole',
 		data : {
 			username : username
 		},
