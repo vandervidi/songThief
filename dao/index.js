@@ -43,9 +43,35 @@ exports.getSongsStolenFromMe = function(req, res){
 
 // This function returns a user's robbers Facebook Id's
 exports.getRobbers = function(req, res){
+	var robbersData = [];
 	UserM.findOne({ 'userId' : req.body.userId }, 'robbers', function (err, doc) {
 		console.log("getRobbers() ", doc);
 		if (err) return res.json({success: 0});
+
+//####
+UserM.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
+					if (err) return res.json({success: 0});
+					else{
+						console.log(robbersDoc)
+						for(var i = 0; i < doc.friends.length; i++){
+							responseData.push({
+								friendId: robbersDoc[i].userId,
+								profilePic: robbersDoc[i].profilePic,
+								location: {
+									lat: robbersDoc[i].location.lat,
+									lng: robbersDoc[i].location.lng 
+								}
+							});
+						}
+					}
+					res.json({ success: 1, robbersData: responseData });
+				});
+
+//#####
+
+
+
+
 		else res.json({success: 1, robbers: doc.robbers});
 	});
 };
@@ -128,8 +154,8 @@ exports.connect = function(req,res){
 			});
 	  	}
 	});
-
 };
+
 
 // Once a connection is initiated - do the following
 conn.once('open' , function(){
