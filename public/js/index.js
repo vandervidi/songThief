@@ -51,7 +51,7 @@ $(document).ready(function() {
 
 			$.ajax({
 				type : "POST",
-				url : 'http://localhost:8020/connect',
+				url : 'https://songthief.herokuapp.com/connect',
 				data : {
 					userId : userId,
 					profilePic : profilePic,
@@ -76,7 +76,7 @@ $(document).ready(function() {
 
 						if (data.isRobbed)
 							//Case 1
-							window.location.href = "nearFriends.html";
+							window.location.href = "youAreRobbed.html";
 						else
 							//Case 2
 							window.location.href = "nearFriends.html";
