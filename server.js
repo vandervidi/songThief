@@ -1,5 +1,6 @@
 var express = require('express');
 var dao = require('./dao');
+var users = require('./users');
 var bodyParser = require('body-parser');
 var url = require('url');
 var app = express();
@@ -17,21 +18,19 @@ app.use(function(req,res,next){
 	next();
 });
 
-app.post('/connect' , dao.connect ,function(req, res){
+app.post('/connect' , users.connect ,function(req, res){
 });
 
-app.post('/songsIStole', dao.getSongsIStole, function(req, res){
+app.post('/songsIStole', users.getSongsIStole, function(req, res){
 });
 
-
-app.post('/songsStolenFromMe', dao.getSongsStolenFromMe, function(req, res){
+app.post('/songsStolenFromMe', users.getSongsStolenFromMe, function(req, res){
 });
 
-
-app.post('/getFriendsLocations', dao.getFriendsLocations, function(req, res){
+app.post('/getFriendsLocations', users.getFriendsLocations, function(req, res){
 });
 
-app.post('/getRobbers', dao.getRobbers, function(req, res){
+app.post('/getRobbers', users.getRobbers, function(req, res){
 });
 
 console.log('listening on port '+8020);
