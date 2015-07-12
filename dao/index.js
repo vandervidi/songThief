@@ -19,11 +19,10 @@ conn.on('error', function(err){
 conn.once('open' , function(){
 	console.log('connected');
 	UserM = this.model('UserM');
-
 });
 
 //Exporting the USER schema model object
-exports.conn = conn.model('UserM');
+exports.UserM = conn.model('UserM');
 
 // When the node process is terminated (Ctrl+c is pressed) , close the connection to the DB.
 process.on('SIGINT', function() {

@@ -1,9 +1,9 @@
 //Reference to USER schema model object
-var conn =  require('../dao').conn;
+var UserM =  require('../dao').UserM;
 
 //This function returns a list of songs a user stole from his friends
 exports.getSongsIStole = function(req,res){	
-	conn.findOne({ 'username' : req.body.userId }, 'mySteal', function (err, doc) {
+	UserM.findOne({ 'username' : req.body.userId }, 'mySteal', function (err, doc) {
 		if (err) return handleError(err);
 		res.json(doc.mySteal);
 	});
@@ -14,7 +14,7 @@ exports.getSongsIStole = function(req,res){
 // and returns a songs list with response object
 exports.getSongsStolenFromMe = function(req, res){
 	
-	conn.findOne({ 'userId' : req.body.userId}, 'mySongs', function (err, doc) {
+	UserM.findOne({ 'userId' : req.body.userId}, 'mySongs', function (err, doc) {
 		if (err) return handleError(err);
 
 		var songsStealed = [];
@@ -31,11 +31,11 @@ exports.getSongsStolenFromMe = function(req, res){
 // This function returns a user's robbers Facebook Id's
 exports.getRobbers = function(req, res){
 	var responseData = [];
-	conn.findOne({ 'userId' : req.body.userId }, 'robbers', function (err, doc) {
+	UserM.findOne({ 'userId' : req.body.userId }, 'robbers', function (err, doc) {
 		if (err) return res.json({success: 0});
 
 	// Find all robbers documents from the DB.
-	conn.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
+	UserM.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
 					if (err) return res.json({success: 0});
 
 					for(var i = 0; i < doc.robbers.length; i++){
@@ -57,13 +57,13 @@ exports.getRobbers = function(req, res){
 exports.getFriendsLocations = function(req, res){
 	var responseData = [];
 	// Get logged-in user's friends list
-	conn.findOne({ 'userId' : req.body.userId },  function (err, doc) {
+	UserM.findOne({ 'userId' : req.body.userId },  function (err, doc) {
 		if (err) return res.json({success: 0});
 			console.log("logged-in user document: ", doc)
 			console.log("he has: " + doc.friends.length + "Friends")
 
 				// Find each friend in the DB 
-				conn.find({ 'userId' : { $in : doc.friends } }, function (err, friendDoc) {
+				UserM.find({ 'userId' : { $in : doc.friends } }, function (err, friendDoc) {
 					if (err) return res.json({success: 0});
 					else{
 						console.log(friendDoc)
@@ -88,7 +88,7 @@ exports.getFriendsLocations = function(req, res){
 exports.connect = function(req,res){
 	console.log('connect()');
 
-	conn.findOne({ userId: req.body.userId}, function (err, doc){
+	UserM.findOne({ userId: req.body.userId}, function (err, doc){
 		if (err) return res.json({success: 0});
 		if (!!doc){
 			console.log("########## User is modified");

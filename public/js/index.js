@@ -79,7 +79,7 @@ $(document).ready(function() {
 							window.location.href = "youAreRobbed.html";
 						else
 							//Case 2
-							window.location.href = "nearFriends.html";
+							window.location.href = "getReady.html";
 					} else {
 						// prompt msg to user on failure
 						alert('We are sorry,\nthere is an error.');
