@@ -19,11 +19,11 @@ html, body {
 	text-transform: uppercase;
 }
 #navTitle {
-	  padding-top: 19px;
+	  padding-top: 15px;
 }
 #backBtn {
 	position: absolute;
-	top: 12px;
+	top: 9px;
 	left: 8px;
 	font-family: NexaBold;
 	color: white;
