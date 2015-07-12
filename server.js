@@ -33,4 +33,7 @@ app.post('/getFriendsLocations', users.getFriendsLocations, function(req, res){
 app.post('/getRobbers', users.getRobbers, function(req, res){
 });
 
+app.post('/rob', users.rob, function(req, res){
+});
+
 console.log('listening on port '+8020);
