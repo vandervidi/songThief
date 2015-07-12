@@ -1,0 +1,56 @@
+@font-face {
+	font-family: NexaBold;
+	src: url("../fonts/nexa/Nexa Bold.otf");
+}
+
+html, body {
+	margin: 0px;
+	padding: 0px;
+	background: #303344;
+}
+#appNavigator {
+	/*display: table;*/
+	width: 100%;
+	background: #2cf0b9;
+	height: 53px;
+	text-align: center;
+	font-size: 16px;
+	font-family: NexaBold;
+	text-transform: uppercase;
+}
+#navTitle {
+	  padding-top: 19px;
+}
+#backBtn {
+	position: absolute;
+	top: 12px;
+	left: 8px;
+	font-family: NexaBold;
+	color: white;
+	font-size: 20px;
+
+	background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+
+    outline:none;
+}
+
+#songs{
+	margin: 0 auto;
+	/*width: 400px;*/
+}
+
+#songs > section , #songs > canvas{
+	border: 1px solid #000;
+	margin-top: 10px;
+	padding: 10px;
+	text-align: center;
+}
+
+.center{
+	margin-top: 10px;
+	text-align: center;
+}

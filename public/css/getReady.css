@@ -39,22 +39,6 @@ html, body {
 	text-transform: uppercase;
 	text-align: left;
 }
-#skipBtn {
-	position: absolute;
-	top: 12px;
-	right: 19px;
-	font-family: NexaBold;
-	color: white;
-	font-size: 20px;
-
-	background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-
-    outline:none;
-}
 #mainContent {
 	text-align: center;
 	color: white;

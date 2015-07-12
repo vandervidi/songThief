@@ -11,14 +11,14 @@
 html, body, #gMap {
 	height: 100%;
 	margin: 0px;
-	padding: 0px
+	padding: 0px;
+	background: #303344;
 }
 
 #wrapper {
 	position: relative;
 	width: 375px;
 	height: 597px;
-	background: #303344;
 }
 
 #appNavigator {
@@ -28,7 +28,6 @@ html, body, #gMap {
 	height: 53px;
 	text-align: center;
 }
-
 #logoLeft {
 	display: table-cell;
 	vertical-align: middle;
@@ -37,7 +36,6 @@ html, body, #gMap {
 	text-transform: uppercase;
 	text-align: right;
 }
-
 #logoRight {
 	display: table-cell;
 	vertical-align: middle;
@@ -46,7 +44,22 @@ html, body, #gMap {
 	text-transform: uppercase;
 	text-align: left;
 }
+#skipBtn {
+	position: absolute;
+	top: 12px;
+	right: 19px;
+	font-family: NexaBold;
+	color: white;
+	font-size: 20px;
 
+	background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+
+    outline:none;
+}
 #gMap {
 	height: 467px;
 	/*visibility: hidden;*/
