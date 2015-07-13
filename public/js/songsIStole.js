@@ -9,8 +9,7 @@ $(document).ready(function() {
 		success : function(data) {
 			console.log(data);
 			$.each(data, function(key,song){
-
-				if (!isDayLeft(song.stealTimestamp)){
+				if ( !is48HLeft(song.stealTimestamp) ){
 					// Create circle
 					var circle = $('<canvas class="loader">');
 
@@ -21,29 +20,30 @@ $(document).ready(function() {
 					var songItem = $('<section class="song">');
 					songItem.append(songNameArtist);
 					songItem.append(circle);
-					
 
 					// Add to the screen
 					$("#songs").append(songItem);
 
-					var percent = calculatePercentDayLeft(song.stealTimestamp);
+					// Calc percent to show
+					var percent = calcPercentOfSecondsFrom48H(song.stealTimestamp);
+					var percentRemains = 100-percent;
 
 					var options = {
 						width: 65, // width of the loader in pixels
 						height: 65, // height of the loader in pixels
 						animate: true, // whether to animate the loader or not
 						displayOnLoad: true,
-						percentage: percent, // percent of the value, between 0 and 100
+						percentage: percentRemains, // percent of the value, between 0 and 100
 						speed: 40, // miliseconds between animation cycles, lower value is faster
 						roundedLine: false, // whether the line is rounded, in pixels
 						showRemaining: true, // how the remaining percentage (100% - percentage)
-						fontFamily: 'Helvetica', // name of the font for the percentage
+						//fontFamily: 'Helvetica', // name of the font for the percentage
 						fontSize: '20px', // size of the percentage font, in pixels
 						showText: true, // whether to display the percentage text
 						diameter: 30, // diameter of the circle, in pixels
-						fontColor: 'rgba(25, 25, 25, 0.6)', // color of the font in the center of the loader, any CSS color would work, hex, rgb, rgba, hsl, hsla
-						lineColor: 'rgba(55, 55, 55, 1)', // line color of the main circle
-						remainingLineColor: 'rgba(55, 55, 55, 0.4)', // line color of the remaining percentage (if showRemaining is true)
+						//fontColor: 'rgba(25, 25, 25, 0.6)', // color of the font in the center of the loader, any CSS color would work, hex, rgb, rgba, hsl, hsla
+						lineColor: '#2cf0b9', // line color of the main circle	// user remaining time
+						remainingLineColor: '#000000', // line color of the remaining percentage (if showRemaining is true)	//user consume time
 						lineWidth: 5 // the width of the circle line in pixels
 					};
 					//select the canvas and create classyloader
@@ -68,27 +68,20 @@ $(document).ready(function() {
 });
 
 
-function isDayLeft(timestamp){
+function is48HLeft(timestamp){
 	// Calculate time from timestamp untill now
-	// and return is a day (24H) was left
-	// ...
-	// ...
-
-	// for test:
-	return false;
+	var timeDiffVal =  timeDiff(timestamp, Date.now() );
+	
+	// If pass 48H
+	if (timeDiffVal.days >=2) return true;
+	else return false;
 }
-function calculatePercentDayLeft(timestamp){
-	// Calculate time from timestamp untill now
-	// and calculate how many time of the day has left
-	// ....
-	// ...
-
-	//for test:
-	return 67;
+function calcPercentOfSecondsFrom48H(timestamp){
+	var twoDays = 86400;// in seconds
+	var secDiffVal = Math.floor((Date.now() - timestamp) / 1000);
+	var percent = parseInt(secDiffVal*100/twoDays);
+	return percent;
 }
-
-
-
 function timeDiff( tstart, tend ) {
   var diff = Math.floor((tend - tstart) / 1000), units = [
     { d: 60, l: "seconds" },
@@ -96,13 +89,29 @@ function timeDiff( tstart, tend ) {
     { d: 24, l: "hours" },
     { d: 7, l: "days" }
   ];
-
+  var res = {
+  	seconds: 0,
+  	minutes: 0,
+  	hours: 0,
+  	days: 0
+  }
   var s = '';
   for (var i = 0; i < units.length; ++i) {
     s = (diff % units[i].d) + " " + units[i].l + " " + s;
+    switch(i){
+    	case 0: res.seconds = diff % units[i].d;//seconds
+    		break;
+    	case 1: res.minutes = diff % units[i].d;//minutes
+    		break;
+    	case 2: res.hours = diff % units[i].d;//hours
+    		break;
+    	case 3: res.days = diff % units[i].d;//days
+    		break;
+    }
     diff = Math.floor(diff / units[i].d);
   }
-  return s;
+  //return s;
+  return res;
 }
 
 
