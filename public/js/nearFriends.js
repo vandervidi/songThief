@@ -110,7 +110,7 @@ $(document).ready(function() {
 	// Onclick for 'skip' button
 	$('#skipBtn').click(function (){
 		window.location.href = "timeToRun.html";
-	})
+	});
 
 });
 
