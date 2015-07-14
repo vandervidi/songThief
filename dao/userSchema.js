@@ -28,6 +28,9 @@ var userSchema = new schema({
 		stealTimestamp: Number,
 		userId: String	
 	}],
+	robbersGiveBackSong: [{
+		type: String, unique: 1
+	}],
 }, {collection: 'users'});
 
 exports.userSchema = userSchema;

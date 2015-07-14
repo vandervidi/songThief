@@ -57,8 +57,8 @@ $(document).ready(function() {
 					profilePic : profilePic,
 					friendsList : friendsList,
 					location : {
-						lat : 31.9743780,
-						lng : 34.7739330
+						lat : 31.974378,
+						lng : 34.7739333
 					}
 				},
 				success : function(data) {
@@ -77,9 +77,12 @@ $(document).ready(function() {
 						if (data.isRobbed)
 							//Case 1
 							window.location.href = "youAreRobbed.html";
-						else
-							//Case 2
+						else if() {
+							//Case 2 - if there is song come back
+							window.location.href = "songComeBack.html";
+						}else {
 							window.location.href = "getReady.html";
+						}
 					} else {
 						// prompt msg to user on failure
 						alert('We are sorry,\nthere is an error.');

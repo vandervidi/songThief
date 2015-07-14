@@ -3,9 +3,14 @@ var UserM =  require('../dao').UserM;
 
 //This function returns a list of songs a user stole from his friends
 exports.getSongsIStole = function(req,res){	
-	UserM.findOne({ 'username' : req.body.userId }, 'mySteal', function (err, doc) {
-		if (err) return handleError(err);
-		res.json(doc.mySteal);
+	console.log('getSongsIStole() - ',req.body.userId);
+	UserM.findOne({ 'userId' : req.body.userId }, 'mySteal', function (err, doc) {
+		if (err) return res.json({success: 0});
+		if (doc.mySteal.length >0){
+			res.json(doc.mySteal);
+		}else{
+			res.json({success:0, desc:'List of songs i stole is empty'});
+		}
 	});
 };
 
@@ -15,7 +20,7 @@ exports.getSongsIStole = function(req,res){
 exports.getSongsStolenFromMe = function(req, res){
 	
 	UserM.findOne({ 'userId' : req.body.userId}, 'mySongs', function (err, doc) {
-		if (err) return handleError(err);
+		if (err) return res.json({success: 0});
 
 		var songsStealed = [];
 		for (var i = 0; i < doc.mySongs.length; i++){
@@ -250,6 +255,38 @@ exports.rob = function(req, res){
 		// });	
 	// });
 };
+
+exports.giveBackSong = function(req, res){
+	//req.body.song
+	console.log('giveBackSong() userId ',req.body.userId);
+	console.log('giveBackSong() song ',req.body.song);
+	console.log('giveBackSong() song ',req.body.victimId);
+
+	UserM.update(
+		{userId: req.body.userId} ,
+		{ $pull: { 'mySteal': { url: req.body.song } } } 
+		,function(err, effectedDoc1){
+			if (err) return res.json({success: 0, desc: err});
+	  		else{
+				UserM.update(
+					{userId: req.body.victimId} ,
+					{ $push: { 'robbersGiveBackSong' : req.body.userId } } 
+					,function(err, effectedDoc2){
+						// Now need to re-enable the song in victimId mySongs list
+						//
+						//
+						
+						if (err) return res.json({success: 0, desc: err});
+	  					else{
+							res.json({ success: 1, effectedDoc1: effectedDoc1, effectedDoc2: effectedDoc2 });
+						}
+				});
+			}
+		});
+	
+
+	
+}
 
 exports.canRob = function(req, res) {
 	//Working - get all available songs

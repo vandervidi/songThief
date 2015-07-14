@@ -1,15 +1,15 @@
-var username = localStorage.getItem("username");
+var userId = window.sessionStorage.getItem("id");
 $(document).ready(function() {
 	$.ajax({
 		type : "POST",
 		url : 'http://localhost:8020/songsIStole',
 		data : {
-			username : username
+			userId : userId
 		},
 		success : function(data) {
 			console.log(data);
 			$.each(data, function(key,song){
-				if ( !is48HLeft(song.stealTimestamp) ){
+				if ( !is24HLeft(song.stealTimestamp) ){
 					// Create circle
 					var circle = $('<canvas class="loader">');
 
@@ -25,7 +25,7 @@ $(document).ready(function() {
 					$("#songs").append(songItem);
 
 					// Calc percent to show
-					var percent = calcPercentOfSecondsFrom48H(song.stealTimestamp);
+					var percent = calcPercentOfSecondsFrom24H(song.stealTimestamp);
 					var percentRemains = 100-percent;
 
 					var options = {
@@ -39,7 +39,7 @@ $(document).ready(function() {
 						showRemaining: true, // how the remaining percentage (100% - percentage)
 						//fontFamily: 'Helvetica', // name of the font for the percentage
 						fontSize: '20px', // size of the percentage font, in pixels
-						showText: true, // whether to display the percentage text
+						showText: false, // whether to display the percentage text
 						diameter: 30, // diameter of the circle, in pixels
 						//fontColor: 'rgba(25, 25, 25, 0.6)', // color of the font in the center of the loader, any CSS color would work, hex, rgb, rgba, hsl, hsla
 						lineColor: '#2cf0b9', // line color of the main circle	// user remaining time
@@ -48,6 +48,10 @@ $(document).ready(function() {
 					};
 					//select the canvas and create classyloader
 					$('.loader:last').ClassyLoader(options);
+				}else {
+					// send to server this song to remove from my steal list
+					// and re-enable the song at victims songs list
+					giveBackSong_reenableVictimSong(song);
 				}
 			});
 		},
@@ -67,17 +71,42 @@ $(document).ready(function() {
 	});
 });
 
+function giveBackSong_reenableVictimSong(song){
+	console.log('song.userId ',song.userId);
+	$.ajax({
+		type : "POST",
+		url : 'http://localhost:8020/giveBackSong',
+		data : {
+			userId : userId,
+			song : song.url,
+			victimId : song.userId
+		},
+		success : function(data) {
+			if (data.success==true 
+				&& data.effectedDoc1==true
+				&& data.effectedDoc2==true)
+				
+				//Now reenable victim song
+				
+			else return false;
+		},
+		error : function(objRequest, errortype) {
+				console.log("Cannot get followd users Json");
+			}
+		});
+}
 
-function is48HLeft(timestamp){
+
+function is24HLeft(timestamp){
 	// Calculate time from timestamp untill now
 	var timeDiffVal =  timeDiff(timestamp, Date.now() );
 	
 	// If pass 48H
-	if (timeDiffVal.days >=2) return true;
+	if (timeDiffVal.days >=1) return true;
 	else return false;
 }
-function calcPercentOfSecondsFrom48H(timestamp){
-	var twoDays = 86400;// in seconds
+function calcPercentOfSecondsFrom24H(timestamp){
+	var twoDays = 43200;// in seconds
 	var secDiffVal = Math.floor((Date.now() - timestamp) / 1000);
 	var percent = parseInt(secDiffVal*100/twoDays);
 	return percent;
