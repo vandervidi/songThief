@@ -91,18 +91,20 @@ exports.connect = function(req,res){
 	conn.findOne({ userId: req.body.userId}, function (err, doc){
 		if (err) return res.json({success: 0});
 		if (!!doc){
-			console.log("########## User is modified");
+			
 			// The user exists then modify friends list
 			doc.profilePic = req.body.profilePic;	//update profile picture
 			doc.friends = req.body.friendsList;		//update friends list
-			doc.save();
-
+			doc.save(function(err){
+				console.log("########## Could not modify user. ERROR: ", err);
+			});
+			console.log("########## User is modified");
 			res.json({success: 1, isRobbed: doc.needShowMessage});
 			  		
 	 	}else {
 	 		// Create a new user
 			// Step 1: Create a new model
-			console.log("########## Creating a new user");
+			
 			var newUser = new UserM({
 				userId: req.body.userId,
 				profilePic: req.body.profilePic, 
@@ -113,14 +115,15 @@ exports.connect = function(req,res){
 				},
 				friends: req.body.friendsList
 			});
-
+			console.log("########## Add new user: Step 1/2: Created successfully a new user model");
+			// Step 2: Save it in the database
 			newUser.save(function(err, doc){
 				if (err) return res.json({success: 0});
 		  		else{
-		  			console.log("saved- " + doc);
+		  			console.log("########## Add new user: Step 2/2: Saved the user in the database");
 		  			res.json({success: 1});
-		  		}
-			});
-	  	}
-	});
+		  			}
+				});
+	  		}
+		});
 };
