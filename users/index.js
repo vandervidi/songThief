@@ -1,9 +1,9 @@
 //Reference to USER schema model object
-var conn =  require('../dao').conn;
+var UserM =  require('../dao').UserM;
 
 //This function returns a list of songs a user stole from his friends
 exports.getSongsIStole = function(req,res){	
-	conn.findOne({ 'username' : req.body.userId }, 'mySteal', function (err, doc) {
+	UserM.findOne({ 'username' : req.body.userId }, 'mySteal', function (err, doc) {
 		if (err) return handleError(err);
 		res.json(doc.mySteal);
 	});
@@ -14,7 +14,7 @@ exports.getSongsIStole = function(req,res){
 // and returns a songs list with response object
 exports.getSongsStolenFromMe = function(req, res){
 	
-	conn.findOne({ 'userId' : req.body.userId}, 'mySongs', function (err, doc) {
+	UserM.findOne({ 'userId' : req.body.userId}, 'mySongs', function (err, doc) {
 		if (err) return handleError(err);
 
 		var songsStealed = [];
@@ -31,11 +31,11 @@ exports.getSongsStolenFromMe = function(req, res){
 // This function returns a user's robbers Facebook Id's
 exports.getRobbers = function(req, res){
 	var responseData = [];
-	conn.findOne({ 'userId' : req.body.userId }, 'robbers', function (err, doc) {
+	UserM.findOne({ 'userId' : req.body.userId }, 'robbers', function (err, doc) {
 		if (err) return res.json({success: 0});
 
 	// Find all robbers documents from the DB.
-	conn.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
+	UserM.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
 					if (err) return res.json({success: 0});
 
 					for(var i = 0; i < doc.robbers.length; i++){
@@ -57,13 +57,13 @@ exports.getRobbers = function(req, res){
 exports.getFriendsLocations = function(req, res){
 	var responseData = [];
 	// Get logged-in user's friends list
-	conn.findOne({ 'userId' : req.body.userId },  function (err, doc) {
+	UserM.findOne({ 'userId' : req.body.userId },  function (err, doc) {
 		if (err) return res.json({success: 0});
 			console.log("logged-in user document: ", doc)
 			console.log("he has: " + doc.friends.length + "Friends")
 
 				// Find each friend in the DB 
-				conn.find({ 'userId' : { $in : doc.friends } }, function (err, friendDoc) {
+				UserM.find({ 'userId' : { $in : doc.friends } }, function (err, friendDoc) {
 					if (err) return res.json({success: 0});
 					else{
 						console.log(friendDoc)
@@ -88,7 +88,7 @@ exports.getFriendsLocations = function(req, res){
 exports.connect = function(req,res){
 	console.log('connect()');
 
-	conn.findOne({ userId: req.body.userId}, function (err, doc){
+	UserM.findOne({ userId: req.body.userId}, function (err, doc){
 		if (err) return res.json({success: 0});
 		if (!!doc){
 			
@@ -122,8 +122,151 @@ exports.connect = function(req,res){
 		  		else{
 		  			console.log("########## Add new user: Step 2/2: Saved the user in the database");
 		  			res.json({success: 1});
-		  			}
-				});
+
+		  		}
+			});
+	  	}
+	});
+};
+
+// This function robbs a song from selected user
+exports.rob = function(req, res){
+	//var responseData = [];
+	
+	// UserM.aggregate(
+	//   {$match: {userId: req.body.victimId}},
+	//   {$unwind: '$mySongs'},
+	//   {$match: {'mySongs.stolen': false}}, function (err, doc) {
+	
+	console.log('rob from: '+req.body.victimId);
+	
+	
+	//aggregate.group({_id:’$cust_id’, total: {$sum: ‘$amount’}});
+
+	// var aggregate = UserM.aggregate();
+	// aggregate.match({userId: req.body.victimId});
+	// aggregate.group({ mySongs: {$match: {mySongs.stolen: false}}});
+	// aggregate.exec(function(err,results){
+	// 	res.json({success: results});
+	// });
+
+
+	
+	UserM.findOne(
+    		{'userId' : req.body.victimId}, function (err, doc) {
+
+	
+		var songAvailable = [];
+		for(var i=0; i<doc.mySongs.length;  i++){
+			if (!doc.mySongs[i].stolen){
+				songAvailable.push(i);
+			}
+		}
+
+		// Get random song from 'songAvailable' array
+		var randomSongIndexPtr =  randomIntFromInterval(0,songAvailable.length);
+
+		var randomSongIndex = songAvailable[randomSongIndexPtr];
+		doc.mySongs[ randomSongIndex ].stolen = true;
+		doc.mySongs[ randomSongIndex ].stealTimestamp = Date.now();
+		doc.robbers.push(req.body.robberId);
+		doc.needShowMessage = true;
+		doc.save();
+
+
+		// Update robber document
+		console.log("Robber ID#: ", req.body.robberId);
+
+		var query = {'userId' : req.body.robberId};
+		var update = {$push: {mySteal: {
+    				url: doc.mySongs[ randomSongIndex].url,
+    				songName: doc.mySongs[ randomSongIndex].songName,
+    				artist: doc.mySongs[ randomSongIndex].artist,
+    				stealTimestamp: doc.mySongs[ randomSongIndex].stealTimestamp,
+    				userId: req.body.victimId
+    			} }};
+    	var options = {new: true};
+		
+		UserM.findOneAndUpdate(query, update, options, function(err,robberDoc) {
+			if (err) return res.json({success: 0, desc: err});
+	  		else{
+	  			res.json({success: robberDoc});
 	  		}
 		});
+		
+
+
+		// UserM.update(
+  //   		{'userId' : req.body.robberId}, {
+  //   			$push: {
+  //   				url: doc.mySongs[ randomSongIndex].url,
+  //   				songName: doc.mySongs[ randomSongIndex].songName,
+  //   				artist: doc.mySongs[ randomSongIndex].artist,
+  //   				stealTimestamp: doc.mySongs[ randomSongIndex].stealTimeStamp,
+  //   				userId: req.body.victimId
+
+  //   			} 
+  //   		}).exec(function (err, robberDoc) {
+  //   			res.json({success: robberDoc});
+  //   			// doc.mySteal.push({
+  //   			// 	url: doc.mysongs[ randomSongIndex].url,
+  //   			// 	songName: doc.mysongs[ randomSongIndex].songName,
+  //   			// 	artist: doc.mysongs[ randomSongIndex].artist,
+  //   			// 	stealTimestamp: doc.mysongs[ randomSongIndex].stealTimeStamp,
+  //   			// 	userId: req.req.body.victimId
+
+  //   			// });
+
+		
+		// //Update
+		// //doc.save();
+
+		// });
+
+
+
+
+
+		//res.json( doc.mySongs[ randomSongIndex ]);
+		
+		//Update
+		//doc.save();
+
+	});
+
+		// // Find each friend in the DB 
+		// UserM.find({ 'userId' : { $in : doc.friends } }, function (err, friendDoc) {
+		// 	if (err) return res.json({success: 0});
+		// 	else{
+		// 		console.log(friendDoc)
+		// 		for(var i = 0; i < doc.friends.length; i++){
+		// 			responseData.push({
+		// 				friendId: friendDoc[i].userId,
+		// 				profilePic: friendDoc[i].profilePic,
+		// 				location: {
+		// 					lat: friendDoc[i].location.lat,
+		// 					lng: friendDoc[i].location.lng 
+		// 				}
+		// 			});
+		// 		}
+		// 	}
+		// 	res.json({ success: 1, friendsData: responseData });
+		// });	
+	// });
 };
+
+exports.canRob = function(req, res) {
+	//Working - get all available songs
+	UserM.aggregate(
+	  	{$match: {userId: req.body.victimId}},
+	  	{$unwind: "$mySongs"},
+	  	{$match: {"mySongs.stolen": false}}, function(err,docs){
+			res.json({ success: 1, docs: docs });
+	});
+}
+
+// Create random number between 2 numbers
+function randomIntFromInterval(min,max) {
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+>>>>>>> 6bfba41fb8807f7ce9c927ca79ef117ee8320deb
