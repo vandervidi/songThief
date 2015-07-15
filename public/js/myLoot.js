@@ -1,4 +1,4 @@
-var userId = window.sessionStorage.getItem("id");
+var userId = window.sessionStorage.id;
 $(document).ready(function() {
 	$.ajax({
 		type : "POST",
@@ -8,6 +8,7 @@ $(document).ready(function() {
 		},
 		success : function(data) {
 			console.log(data);
+			debugger
 			$.each(data, function(key,song){
 				if ( !is24HLeft(song.stealTimestamp) ){
 					// Create circle
@@ -82,13 +83,13 @@ function giveBackSong_reenableVictimSong(song){
 			victimId : song.userId
 		},
 		success : function(data) {
-			if (data.success==true 
-				&& data.effectedDoc1==true
-				&& data.effectedDoc2==true)
-				
+			if (data.success==true){
+				debugger
+				console.log(data);
 				//Now reenable victim song
-				
-			else return false;
+				}
+			else 
+				return false;
 		},
 		error : function(objRequest, errortype) {
 				console.log("Cannot get followd users Json");

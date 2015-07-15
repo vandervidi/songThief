@@ -18,20 +18,30 @@ exports.getSongsIStole = function(req,res){
 // This function connects to the database and returns a list of songs stolen from a user
 // and returns a songs list with response object
 exports.getSongsStolenFromMe = function(req, res){
-	
-	UserM.findOne({ 'userId' : req.body.userId}, 'mySongs', function (err, doc) {
-		if (err) return res.json({success: 0});
+	UserM.aggregate(
+	  {$match: {userId: req.body.userId}},
+	  {$unwind: '$mySongs'},
+	  {$match: {'mySongs.stolen': true}},
+	  //{$group({'_id':'$_id','players': {'$push': '$players'}})
+	  {$group: {'_id':'$_id', 'songs': {'$push': '$mySongs'}}}, function (err, doc) {
+	  	console.log(doc)
+	  	res.json( doc);
+	  })};
 
-		var songsStealed = [];
-		for (var i = 0; i < doc.mySongs.length; i++){
-			//console.log(doc.mySongs[i])
-			if (doc.mySongs[i].stolen){
-				songsStealed.push(doc.mySongs[i]);
-			}
-		}
-		res.json(songsStealed);
-	});
-};
+
+// 	UserM.findOne({ 'userId' : req.body.userId}, 'mySongs', function (err, doc) {
+// 		if (err) return res.json({success: 0});
+
+// 		var songsStealed = [];
+// 		for (var i = 0; i < doc.mySongs.length; i++){
+// 			//console.log(doc.mySongs[i])
+// 			if (doc.mySongs[i].stolen){
+// 				songsStealed.push(doc.mySongs[i]);
+// 			}
+// 		}
+// 		res.json(songsStealed);
+// 	});
+// };
 
 // This function returns a user's robbers Facebook Id's
 exports.getRobbers = function(req, res){
@@ -194,7 +204,7 @@ exports.rob = function(req, res){
 	//   {$unwind: '$mySongs'},
 	//   {$match: {'mySongs.stolen': false}}, function (err, doc) {
 	
-	console.log('rob from: '+req.body.victimId);
+	console.log('rob from: '+ req.body.victimId);
 	
 	UserM.findOne(
     		{'userId' : req.body.victimId}, function (err, doc) {
@@ -204,11 +214,12 @@ exports.rob = function(req, res){
 						songAvailable.push(i);
 					}
 				}
-
+				console.log("songAvailable: ", songAvailable);
 		// Get random song from 'songAvailable' array
-		var randomSongIndexPtr =  randomIntFromInterval(0,songAvailable.length);
-
+		var randomSongIndexPtr =  randomIntFromInterval(0,songAvailable.length -1);
+		console.log("randomSongIndexPtr: ", randomSongIndexPtr);
 		var randomSongIndex = songAvailable[randomSongIndexPtr];
+		console.log("randomSongIndex", randomSongIndex);
 		doc.mySongs[ randomSongIndex ].stolen = true;
 		doc.mySongs[ randomSongIndex ].stealTimestamp = Date.now();
 		doc.robbers.push(req.body.robberId);
@@ -345,7 +356,7 @@ exports.canRob = function(req, res) {
 
 
 // Create random number between 2 numbers
-function randomIntFromInterval(min,max) {
-    return Math.floor(Math.random()*(max-min+1)+min);
+function randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 

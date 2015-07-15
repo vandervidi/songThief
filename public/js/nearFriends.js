@@ -1,7 +1,7 @@
-var map,
+var draggedUserId,
+	map,
     overlay,
-    userLocatinoOffset = 0.00008;
-//Offset to present user location at the bottom of the map instead of the center
+    userLocatinoOffset = 0.00008; //Offset to present user location at the bottom of the map instead of the center
 var mapCenter = {
 	lat : 32.0900000 + userLocatinoOffset,
 	lng : 34.8030835
@@ -69,7 +69,10 @@ function initialize() {
 					$(".draggable").draggable({
 						containment : "#wrapper",
 						revert : "invalid",
-						scroll : false
+						scroll : false,
+						start: function() {
+				        			draggedUserId = $(this).attr('id');
+      							}
 					});
 
 				} else {
@@ -100,10 +103,30 @@ $(document).ready(function() {
 			console.log(event);
 			console.log(ui);
 			ui.draggable.css("display", "none");
-			console.log($(this));
+			console.log("This: ", $(this));
 			$("#chestHolder").removeClass();
 			$("#chestHolder").addClass("droppableChestAfterUserDropped");
-			window.location.href = "timeToRun.html";
+
+
+			$.ajax({
+				type : "POST",
+				url : 'http://localhost:8020/rob',
+				data : {
+					robberId :  window.sessionStorage.id,
+					victimId: draggedUserId
+				},
+				success : function(data) {
+					if(data.success){
+						debugger
+						window.location.href = "timeToRun.html";
+						}
+				},
+				error : function(objRequest, errortype) {
+						console.log("cannot get robbers of songs that are back");
+					}
+			});
+
+			
 		}
 	});
 
