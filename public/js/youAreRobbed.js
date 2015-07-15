@@ -1,9 +1,4 @@
 $(document).ready(function() {
-	// Onclick for 'skip' button
-	$('#skipBtn').click(function (){
-		window.location.href = "nearFriends.html";
-	});
-
 	// Get Robbers picture link
 	$.ajax({
 		type : "POST",
@@ -14,6 +9,22 @@ $(document).ready(function() {
 		success : function(data) {
 			console.log('data: ', data);
 			if (data.success) {
+				//Configurin navifation
+				if(data.songsAreBack){
+					// Onclick for 'skip' button
+					$('#skipBtn').click(function (){
+						window.location.href = "songsComeBack.html";
+					});
+				}
+				else{
+					// Onclick for 'skip' button
+					$('#skipBtn').click(function (){
+						window.location.href = "getReady.html";
+					});
+				}
+
+
+
 				$.each(data.robbersData, function(key, val) {
 				  $("#robbers").append("<img src=" + val.profilePic + " alt=" +  val.robberId + ">");
 				});

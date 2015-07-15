@@ -1,3 +1,4 @@
+fbAppId = 1422789871382202;  //SongThief Facebook application ID.
 var express = require('express');
 var dao = require('./dao');
 var users = require('./users');
@@ -16,6 +17,10 @@ app.use(function(req,res,next){
 	res.header("Access-Control-Allow-Header", "Origin, X-Requested-With,Content-Type, Accept");
 	res.set("Content-Type", "application/json");
 	next();
+});
+
+app.post('/getAppId' ,function(req, res){
+	res.json({appId: fbAppId});
 });
 
 app.post('/connect' , users.connect ,function(req, res){
@@ -40,6 +45,9 @@ app.post('/giveBackSong', users.giveBackSong, function(req,res){
 });
 
 app.post('/canRob', users.canRob, function(req, res){	
+});
+
+app.post('/getRobbersOfSongsThatAreBack', users.getRobbersOfSongsThatAreBack, function(req, res){	
 });
 
 console.log('listening on port '+8020);

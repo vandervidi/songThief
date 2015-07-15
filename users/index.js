@@ -53,7 +53,45 @@ exports.getRobbers = function(req, res){
 					doc.needShowMessage = false;
 					doc.robbers = [];
 					doc.save();
-					res.json({ success: 1, robbersData: responseData });
+
+					//This is used to configure proper navigation in the robbery notifications page
+					if(doc.robbersGiveBackSong.length > 0)
+						songsAreBack = true;
+					else
+						songsAreBack = false;
+					res.json({ success: 1, robbersData: responseData, songsAreBack: songsAreBack });
+				});
+	});
+};
+
+
+exports.getRobbersOfSongsThatAreBack = function(req, res){
+	var responseData = [];
+	UserM.findOne({ 'userId' : req.body.userId }, 'robbersGiveBackSong', function (err, doc) {
+		if (err) return res.json({success: 0});
+
+	// Find all robbers documents from the DB.
+	UserM.find({ 'userId' : { $in : doc.robbersGiveBackSong } }, function (err, robbersDoc) {
+					if (err) return res.json({success: 0});
+
+					for(var i = 0; i < doc.robbersGiveBackSong.length; i++){
+						responseData.push({
+							robberId: robbersDoc[i].userId,
+							profilePic: robbersDoc[i].profilePic,
+						});
+					}
+					
+					//This is used to configure proper navigation in the robbery notifications page
+					if(doc.robbersGiveBackSong.length > 0)
+						songsAreBack = true;
+					else
+						songsAreBack = false;
+
+					//Reset the array
+					doc.robbersGiveBackSong = [];
+					doc.save();
+
+					res.json({ success: 1, robbersData: responseData, songsAreBack: songsAreBack });
 				});
 	});
 };
@@ -91,6 +129,7 @@ exports.getFriendsLocations = function(req, res){
 // This function connects to the database and checks if the credentials the user supplied
 // are valid.
 exports.connect = function(req,res){
+	var songAreBackStatus;
 	console.log('connect()');
 
 	UserM.findOne({ userId: req.body.userId}, function (err, doc){
@@ -101,10 +140,22 @@ exports.connect = function(req,res){
 			doc.profilePic = req.body.profilePic;	//update profile picture
 			doc.friends = req.body.friendsList;		//update friends list
 			doc.save(function(err){
-				console.log("########## Could not modify user. ERROR: ", err);
+				
+				if (err){
+					console.log("########## Could not modify user. ERROR: ", err);
+					res.json({success: 0, desc: "Could not modify user"});
+				}
+				
 			});
 			console.log("########## User is modified");
-			res.json({success: 1, isRobbed: doc.needShowMessage});
+
+			// if there are any songs that came back from robbery then songsAreBack == true.
+			if(doc.robbersGiveBackSong.length > 0)
+				songsAreBack = true;
+			else
+				songsAreBack = false;
+
+			res.json({success: 1, isRobbed: doc.needShowMessage, songsAreBack: songsAreBack});
 			  		
 	 	}else {
 	 		// Create a new user
@@ -145,28 +196,14 @@ exports.rob = function(req, res){
 	
 	console.log('rob from: '+req.body.victimId);
 	
-	
-	//aggregate.group({_id:’$cust_id’, total: {$sum: ‘$amount’}});
-
-	// var aggregate = UserM.aggregate();
-	// aggregate.match({userId: req.body.victimId});
-	// aggregate.group({ mySongs: {$match: {mySongs.stolen: false}}});
-	// aggregate.exec(function(err,results){
-	// 	res.json({success: results});
-	// });
-
-
-	
 	UserM.findOne(
     		{'userId' : req.body.victimId}, function (err, doc) {
-
-	
-		var songAvailable = [];
-		for(var i=0; i<doc.mySongs.length;  i++){
-			if (!doc.mySongs[i].stolen){
-				songAvailable.push(i);
-			}
-		}
+				var songAvailable = [];
+				for(var i=0; i<doc.mySongs.length;  i++){
+					if (!doc.mySongs[i].stolen){
+						songAvailable.push(i);
+					}
+				}
 
 		// Get random song from 'songAvailable' array
 		var randomSongIndexPtr =  randomIntFromInterval(0,songAvailable.length);
@@ -260,40 +297,44 @@ exports.rob = function(req, res){
 	// });
 };
 
+// This function unlocks a song that its robbery time is over, to the 
 exports.giveBackSong = function(req, res){
-	//req.body.song
+
 	console.log('giveBackSong() userId ',req.body.userId);
 	console.log('giveBackSong() song ',req.body.song);
 	console.log('giveBackSong() song ',req.body.victimId);
 
+	//Remove this song from robbers 'mySteal' array.
 	UserM.update(
 		{userId: req.body.userId} ,
 		{ $pull: { 'mySteal': { url: req.body.song } } } 
 		,function(err, effectedDoc1){
-			if (err) return res.json({success: 0, desc: err});
+			if (err) return res.json({ success: 0, desc: err });
 	  		else{
+	  			//Push the robber's user ID into the victim's robbersGiveBackSong array.
+	  			// It is used later to notify the victim for songs that are given back to him (after 24 hours of captivity)
+				// Return only the firs elements from mySongs array matching the query and then 
+	  			//  re-enable the song in victimId mySongs list
 				UserM.update(
-					{userId: req.body.victimId} ,
-					{ $push: { 'robbersGiveBackSong' : req.body.userId } } 
-					,function(err, effectedDoc2){
-						// Now need to re-enable the song in victimId mySongs list
-						//
-						//
-						
+					{userId: req.body.victimId, 'mySongs.url': req.body.song  } ,
+					{ 	'mySongs.$': 1 ,
+						$push: { 'robbersGiveBackSong' : req.body.userId },
+						$set: {'mySongs.$.stolen' : false, 'mySongs.$.stealTimestamp' : -1	} 
+					},
+
+					function(err, effectedDoc2){
 						if (err) return res.json({success: 0, desc: err});
 	  					else{
-							res.json({ success: 1, effectedDoc1: effectedDoc1, effectedDoc2: effectedDoc2 });
+							res.json({ success: 1});
 						}
 				});
 			}
 		});
-	
-
-	
 }
 
+
 exports.canRob = function(req, res) {
-	//Working - get all available songs
+	//  get all available songs  - Available = are robbable
 	UserM.aggregate(
 	  	{$match: {userId: req.body.victimId}},
 	  	{$unwind: "$mySongs"},
@@ -302,8 +343,9 @@ exports.canRob = function(req, res) {
 	});
 }
 
+
 // Create random number between 2 numbers
 function randomIntFromInterval(min,max) {
     return Math.floor(Math.random()*(max-min+1)+min);
 }
->>>>>>> 6bfba41fb8807f7ce9c927ca79ef117ee8320deb
+
