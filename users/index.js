@@ -49,28 +49,32 @@ exports.getRobbers = function(req, res){
 	UserM.findOne({ 'userId' : req.body.userId }, 'robbers', function (err, doc) {
 		if (err) return res.json({success: 0});
 
-	// Find all robbers documents from the DB.
-	UserM.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
-					if (err) return res.json({success: 0});
+		// Find all robbers documents from the DB.
+		UserM.find({ 'userId' : { $in : doc.robbers } }, function (err, robbersDoc) {
+						if (err) return res.json({success: 0});
 
-					for(var i = 0; i < doc.robbers.length; i++){
-						responseData.push({
-							robberId: robbersDoc[i].userId,
-							profilePic: robbersDoc[i].profilePic,
-						});
-					}
-					// Reset robbers list and reset 'needShowMessage' message
-					//doc.needShowMessage = false;
-					doc.robbers = [];
-					doc.save();
+						for(var i = 0; i < doc.robbers.length; i++){
+							responseData.push({
+								robberId: robbersDoc[i].userId,
+								profilePic: robbersDoc[i].profilePic,
+							});
+						}
+						// Reset robbers list and reset 'needShowMessage' message
+						//doc.needShowMessage = false;
+						doc.robbers = [];
+						doc.save();
 
-					//This is used to configure proper navigation in the robbery notifications page
-					if(doc.robbersGiveBackSong.length > 0)
-						songsAreBack = true;
-					else
-						songsAreBack = false;
-					res.json({ success: 1, robbersData: responseData, songsAreBack: songsAreBack });
-				});
+						var songsAreBackStatus; 
+						console.log('userDoc: ',doc);
+						//This is used to configure proper navigation in the robbery notifications page
+						if(doc.robbersGiveBackSong.length > 0){
+							songsAreBackStatus = true;
+						}else{
+							songsAreBackStatus = false;
+						}
+							
+						res.json({ success: 1, robbersData: responseData, songsAreBack: songsAreBackStatus });
+		});
 	});
 };
 
@@ -139,7 +143,7 @@ exports.getFriendsLocations = function(req, res){
 // This function connects to the database and checks if the credentials the user supplied
 // are valid.
 exports.connect = function(req,res){
-	var songAreBackStatus;
+	
 	console.log('connect()');
 
 	UserM.findOne({ userId: req.body.userId}, function (err, doc){
@@ -159,13 +163,23 @@ exports.connect = function(req,res){
 			});
 			console.log("########## User is modified");
 
-			// if there are any songs that came back from robbery then songsAreBack == true.
-			if(doc.robbersGiveBackSong.length > 0)
-				songsAreBack = true;
-			else
-				songsAreBack = false;
 
-			res.json({success: 1, isRobbed: doc.needShowMessage, songsAreBack: songsAreBack});
+			var songAreBackStatus,robbedStatus;
+			// if there are any songs that came back from robbery then songsAreBack == true.
+			if(doc.robbersGiveBackSong.length > 0){
+				songAreBackStatus = true;
+			}else{
+				songAreBackStatus = false;
+			}			
+
+
+			if(doc.robbers.length > 0){
+				robbedStatus = true;
+			}else{
+				robbedStatus = false;
+			}	
+
+			res.json({success: 1, isRobbed: robbedStatus, songAreBack: songAreBackStatus});
 			  		
 	 	}else {
 	 		// Create a new user

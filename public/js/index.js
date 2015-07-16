@@ -85,7 +85,7 @@ function saveUserData(userId, profilePic, friendsListFb) {
 				if (data.isRobbed)
 					//Case 1
 					window.location.href = "youAreRobbed.html";
-				else if (data.songsAreBack) {
+				else if (data.songAreBack) {
 					//Case 2
 					window.location.href = "songComeBack.html";
 				} else {
