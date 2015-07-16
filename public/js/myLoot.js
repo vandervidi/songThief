@@ -9,52 +9,56 @@ $(document).ready(function() {
 		success : function(data) {
 			console.log(data);
 			debugger
-			$.each(data, function(key,song){
-				if ( !is24HLeft(song.stealTimestamp) ){
-					// Create circle
-					var circle = $('<canvas class="loader">');
+			if (data.success==1){
+				$.each(data.songs, function(key,song){
+					if ( !is24HLeft(song.stealTimestamp) ){
+						// Create circle
+						var circle = $('<canvas class="loader">');
 
-					// Create song data
-					var songNameArtist = $('<section id="songData">' + song.artist + ' - '+ song.songName + '</section>');
-					
-					// connect them
-					var songItem = $('<section class="song">');
-					songItem.append(songNameArtist);
-					songItem.append(circle);
+						// Create song data
+						var songNameArtist = $('<section id="songData">' + song.artist + ' - '+ song.songName + '</section>');
+						
+						// connect them
+						var songItem = $('<section class="song">');
+						songItem.append(songNameArtist);
+						songItem.append(circle);
 
-					// Add to the screen
-					$("#songs").append(songItem);
+						// Add to the screen
+						$("#songs").append(songItem);
 
-					// Calc percent to show
-					var percent = calcPercentOfSecondsFrom24H(song.stealTimestamp);
-					var percentRemains = 100-percent;
+						// Calc percent to show
+						var percent = calcPercentOfSecondsFrom24H(song.stealTimestamp);
+						var percentRemains = 100-percent;
 
-					var options = {
-						width: 65, // width of the loader in pixels
-						height: 65, // height of the loader in pixels
-						animate: true, // whether to animate the loader or not
-						displayOnLoad: true,
-						percentage: percentRemains, // percent of the value, between 0 and 100
-						speed: 40, // miliseconds between animation cycles, lower value is faster
-						roundedLine: false, // whether the line is rounded, in pixels
-						showRemaining: true, // how the remaining percentage (100% - percentage)
-						//fontFamily: 'Helvetica', // name of the font for the percentage
-						fontSize: '20px', // size of the percentage font, in pixels
-						showText: false, // whether to display the percentage text
-						diameter: 30, // diameter of the circle, in pixels
-						//fontColor: 'rgba(25, 25, 25, 0.6)', // color of the font in the center of the loader, any CSS color would work, hex, rgb, rgba, hsl, hsla
-						lineColor: '#2cf0b9', // line color of the main circle	// user remaining time
-						remainingLineColor: '#000000', // line color of the remaining percentage (if showRemaining is true)	//user consume time
-						lineWidth: 5 // the width of the circle line in pixels
-					};
-					//select the canvas and create classyloader
-					$('.loader:last').ClassyLoader(options);
-				}else {
-					// send to server this song to remove from my steal list
-					// and re-enable the song at victims songs list
-					giveBackSong_reenableVictimSong(song);
-				}
-			});
+						var options = {
+							width: 65, // width of the loader in pixels
+							height: 65, // height of the loader in pixels
+							animate: true, // whether to animate the loader or not
+							displayOnLoad: true,
+							percentage: percentRemains, // percent of the value, between 0 and 100
+							speed: 40, // miliseconds between animation cycles, lower value is faster
+							roundedLine: false, // whether the line is rounded, in pixels
+							showRemaining: true, // how the remaining percentage (100% - percentage)
+							//fontFamily: 'Helvetica', // name of the font for the percentage
+							fontSize: '20px', // size of the percentage font, in pixels
+							showText: false, // whether to display the percentage text
+							diameter: 30, // diameter of the circle, in pixels
+							//fontColor: 'rgba(25, 25, 25, 0.6)', // color of the font in the center of the loader, any CSS color would work, hex, rgb, rgba, hsl, hsla
+							lineColor: '#2cf0b9', // line color of the main circle	// user remaining time
+							remainingLineColor: '#000000', // line color of the remaining percentage (if showRemaining is true)	//user consume time
+							lineWidth: 5 // the width of the circle line in pixels
+						};
+						//select the canvas and create classyloader
+						$('.loader:last').ClassyLoader(options);
+					}else {
+						// send to server this song to remove from my steal list
+						// and re-enable the song at victims songs list
+						giveBackSong_reenableVictimSong(song);
+					}
+				});
+			}else{
+				console.log(data.desc);
+			}
 		},
 		error : function(objRequest, errortype) {
 			console.log("Cannot get followd users Json");

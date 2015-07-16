@@ -7,7 +7,7 @@ exports.getSongsIStole = function(req,res){
 	UserM.findOne({ 'userId' : req.body.userId }, 'mySteal', function (err, doc) {
 		if (err) return res.json({success: 0});
 		if (doc.mySteal.length >0){
-			res.json(doc.mySteal);
+			res.json({success:1, songs:doc.mySteal});
 		}else{
 			res.json({success:0, desc:'List of songs i stole is empty'});
 		}
@@ -60,7 +60,7 @@ exports.getRobbers = function(req, res){
 						});
 					}
 					// Reset robbers list and reset 'needShowMessage' message
-					doc.needShowMessage = false;
+					//doc.needShowMessage = false;
 					doc.robbers = [];
 					doc.save();
 
