@@ -1,4 +1,4 @@
-fbAppId = 1422789871382202;  //SongThief Facebook application ID.
+var fbAppId = 1422789871382202;  //SongThief Facebook application ID.
 var express = require('express');
 var dao = require('./dao');
 var users = require('./users');

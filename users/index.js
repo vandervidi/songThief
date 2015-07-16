@@ -46,7 +46,7 @@ exports.getSongsStolenFromMe = function(req, res){
 // This function returns a user's robbers Facebook Id's
 exports.getRobbers = function(req, res){
 	var responseData = [];
-	UserM.findOne({ 'userId' : req.body.userId }, 'robbers', function (err, doc) {
+	UserM.findOne({ 'userId' : req.body.userId }, function (err, doc) {
 		if (err) return res.json({success: 0});
 
 		// Find all robbers documents from the DB.
