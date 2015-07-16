@@ -3,7 +3,6 @@ var schema = mongoose.Schema;
 var userSchema = new schema({
 	userId: {type: String, index: 1, unique: 1, required: true},
 	profilePic: String, 
-	needShowMessage: Boolean,
 	robbers: [{
 		type: String, unique: 1
 	}],
