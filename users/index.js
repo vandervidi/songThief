@@ -60,7 +60,6 @@ exports.getRobbers = function(req, res){
 							});
 						}
 						// Reset robbers list and reset 'needShowMessage' message
-						//doc.needShowMessage = false;
 						doc.robbers = [];
 						doc.save();
 
@@ -116,27 +115,28 @@ exports.getFriendsLocations = function(req, res){
 	// Get logged-in user's friends list
 	UserM.findOne({ 'userId' : req.body.userId },  function (err, doc) {
 		if (err) return res.json({success: 0});
-			console.log("logged-in user document: ", doc)
-			console.log("he has: " + doc.friends.length + "Friends")
+		console.log("logged-in user document: ", doc)
+		console.log("he has: " + doc.friends.length + "Friends")
 
-				// Find each friend in the DB 
-				UserM.find({ 'userId' : { $in : doc.friends } }, function (err, friendDoc) {
-					if (err) return res.json({success: 0});
-					else{
-						console.log(friendDoc)
-						for(var i = 0; i < doc.friends.length; i++){
-							responseData.push({
-								friendId: friendDoc[i].userId,
-								profilePic: friendDoc[i].profilePic,
-								location: {
-									lat: friendDoc[i].location.lat,
-									lng: friendDoc[i].location.lng 
-								}
-							});
+		// Find each friend in the DB --> that really have song in 'mySongs'
+		// need to implement (the)
+		UserM.find({ 'userId' : { $in : doc.friends } }, function (err, friendDoc) {
+			if (err) return res.json({success: 0});
+			else{
+				console.log('friendDoc: ',friendDoc);
+				for(var i = 0; i < doc.friends.length; i++){
+					responseData.push({
+						friendId: friendDoc[i].userId,
+						profilePic: friendDoc[i].profilePic,
+						location: {
+							lat: friendDoc[i].location.lat,
+							lng: friendDoc[i].location.lng 
 						}
-					}
-					res.json({ success: 1, friendsData: responseData });
-				});	
+					});
+				}
+			}
+			res.json({ success: 1, friendsData: responseData });
+		});	
 	});
 };
 
@@ -184,11 +184,9 @@ exports.connect = function(req,res){
 	 	}else {
 	 		// Create a new user
 			// Step 1: Create a new model
-			
 			var newUser = new UserM({
 				userId: req.body.userId,
-				profilePic: req.body.profilePic, 
-				needShowMessage: false,
+				profilePic: req.body.profilePic,
 				location: {
 					lat: req.body.location.lat,
 					lng: req.body.location.lng
@@ -237,7 +235,6 @@ exports.rob = function(req, res){
 		doc.mySongs[ randomSongIndex ].stolen = true;
 		doc.mySongs[ randomSongIndex ].stealTimestamp = Date.now();
 		doc.robbers.push(req.body.robberId);
-		doc.needShowMessage = true;
 		doc.save();
 
 
