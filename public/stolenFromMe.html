@@ -1,19 +1,34 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 	<head>
-		<title>Song Thief</title>
-		<link rel="stylesheet" href="css/style.css">
-		<link rel="stylesheet" href="js/jqueryMobile/jquery.mobile-1.4.5.min.css">
+		<title>Stolen from me</title>
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<!-- <link rel="stylesheet" href="css/"> -->
+		<link rel="stylesheet" href="css/myLoot.css">
+
+		<!-- <link rel="stylesheet" href="js/jqueryMobile/jquery.mobile-1.4.5.min.css"> -->
+		<!-- <link rel="stylesheet" href="css/documentation.css"> -->
 		<script src="js/jquery/jquery-2.1.4.min.js"></script>
-		<script src="js/jqueryMobile/jquery.mobile-1.4.5.min.js"></script>
+		<!-- // <script src="js/jqueryMobile/jquery.mobile-1.4.5.min.js"></script> -->
+		<script src="js/jquery.classyloader.min.js"></script>
 		<script src="js/stolenFromMe.js"></script>
 	</head>
 	<body>
 		<section id="wrapper">
-			<h2>Songs Stolen From Me</h2>
+			<nav id="appNavigator">
+				<button id="backBtn" type="button" class="btn btn-default" aria-label="Left Align">
+				  <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+				</button>
+				<section id="navTitle">MY LOOT</section>
+			</nav>
 			
-			<section id="data"></section>	
-			<section class="center"><b>Swipe To songs that i stole</b></section>
+			<section id="songs">
+				
+			</section>
+
+			<section class="center"><b>Swipe to songs stolen from me</b></section>
+			<canvas id="loader"></canvas>
 		</section>
 	</body>
 </html>

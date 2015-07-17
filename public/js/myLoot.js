@@ -10,13 +10,13 @@ $(document).ready(function() {
 			console.log(data);
 			debugger
 			if (data.success==1){
-				$.each(data.songs, function(key,song){
+				$.each(data.songsList, function(key,song){
 					if ( !is24HLeft(song.stealTimestamp) ){
 						// Create circle
 						var circle = $('<canvas class="loader">');
 
 						// Create song data
-						var songNameArtist = $('<section id="songData">' + song.artist + ' - '+ song.songName + '</section>');
+						var songNameArtist = $('<section id="songData" data-url="'+song.url+'" >' + song.artist + ' - '+ song.songName + '</section>');
 						
 						// connect them
 						var songItem = $('<section class="song">');
@@ -28,14 +28,13 @@ $(document).ready(function() {
 
 						// Calc percent to show
 						var percent = calcPercentOfSecondsFrom24H(song.stealTimestamp);
-						var percentRemains = 100-percent;
 
 						var options = {
 							width: 65, // width of the loader in pixels
 							height: 65, // height of the loader in pixels
 							animate: true, // whether to animate the loader or not
 							displayOnLoad: true,
-							percentage: percentRemains, // percent of the value, between 0 and 100
+							percentage: percent, // percent of the value, between 0 and 100
 							speed: 40, // miliseconds between animation cycles, lower value is faster
 							roundedLine: false, // whether the line is rounded, in pixels
 							showRemaining: true, // how the remaining percentage (100% - percentage)
@@ -71,7 +70,7 @@ $(document).ready(function() {
 
 	// Bind the swipeHandler callback function to the swipe event on div.box
 	// on 'swipe-right'
-	$("body").on( "swipe", function ( event ){
+	$("body").on( "swiperight", function ( event ){
 		window.location.href = "stolenFromMe.html";
 	});
 });
@@ -104,20 +103,20 @@ function giveBackSong_reenableVictimSong(song){
 
 function is24HLeft(timestamp){
 	// Calculate time from timestamp untill now
-	var timeDiffVal =  timeDiff(timestamp, Date.now() );
-	
+	var timeDiffVal =  timeDifference( Date.now(), timestamp );
+	console.log('time left: ',timeDiffVal);
 	// If pass 48H
 	if (timeDiffVal.days >=1) return true;
 	else return false;
 }
 function calcPercentOfSecondsFrom24H(timestamp){
-	var twoDays = 43200;// in seconds
+	var daySec = 86400;// in seconds
 	var secDiffVal = Math.floor((Date.now() - timestamp) / 1000);
-	var percent = parseInt(secDiffVal*100/twoDays);
+	var percent = parseInt(secDiffVal*100/daySec);
 	return percent;
 }
 function timeDiff( tstart, tend ) {
-  var diff = Math.floor((tend - tstart) / 1000), units = [
+  var diff = Math.floor((tend - (tend - tstart)) / 1000), units = [
     { d: 60, l: "seconds" },
     { d: 60, l: "minutes" },
     { d: 24, l: "hours" },
@@ -148,6 +147,28 @@ function timeDiff( tstart, tend ) {
   return res;
 }
 
+function timeDifference(dateNow,olderDate) {
+        var difference = dateNow - olderDate;
+
+        var daysDifference = Math.floor(difference/1000/60/60/24);
+        difference -= daysDifference*1000*60*60*24
+
+       var hoursDifference = Math.floor(difference/1000/60/60);
+        difference -= hoursDifference*1000*60*60
+
+        var minutesDifference = Math.floor(difference/1000/60);
+        difference -= minutesDifference*1000*60
+
+        var secondsDifference = Math.floor(difference/1000);
+
+		return {
+			days: daysDifference,
+			hours: hoursDifference,
+			minutes: minutesDifference,
+			seconds: secondsDifference
+		};
+	     //document.WRITE('difference = ' + daysDifference + ' day/s ' + hoursDifference + ' hour/s ' + minutesDifference + ' minute/s ' + secondsDifference + ' second/s ');
+}
 
 function dataFromTimestamp(timestamp) {
 	var d = new Date(timestamp);

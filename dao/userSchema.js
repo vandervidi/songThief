@@ -18,7 +18,8 @@ var userSchema = new schema({
 		songName: String,
 		artist: String,
 		stolen: Boolean,
-		stealTimestamp: Number
+		stealTimestamp: Number,
+		robberId: String
 	}],
 	mySteal: [{
 		url: {type: String, unique: 1, required: true},

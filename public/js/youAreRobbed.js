@@ -13,7 +13,7 @@ $(document).ready(function() {
 				if(data.songsAreBack){
 					// Onclick for 'skip' button
 					$('#skipBtn').click(function (){
-						window.location.href = "songsComeBack.html";
+						window.location.href = "songComeBack.html";
 					});
 				}
 				else{

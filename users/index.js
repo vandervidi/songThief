@@ -7,9 +7,9 @@ exports.getSongsIStole = function(req,res){
 	UserM.findOne({ 'userId' : req.body.userId }, 'mySteal', function (err, doc) {
 		if (err) return res.json({success: 0});
 		if (doc.mySteal.length >0){
-			res.json({success:1, songs:doc.mySteal});
+			res.json({success:1, songsList: doc.mySteal});
 		}else{
-			res.json({success:0, desc:'List of songs i stole is empty'});
+			res.json({success:2, desc:'List of songs i stole is empty'});
 		}
 	});
 };
@@ -24,8 +24,14 @@ exports.getSongsStolenFromMe = function(req, res){
 	  {$match: {'mySongs.stolen': true}},
 	  //{$group({'_id':'$_id','players': {'$push': '$players'}})
 	  {$group: {'_id':'$_id', 'songs': {'$push': '$mySongs'}}}, function (err, doc) {
-	  	console.log(doc)
-	  	res.json( doc);
+	  	if (err) return res.json({success: 0});
+	  	console.log('getSongsStolenFromMe= ',doc)
+	  	if (doc[0].songs.length >0){
+			res.json({success:1, songsList: doc[0].songs});
+		}else{
+			res.json({success:2, desc:'List of songs stolen from me is empty'});
+		}
+	  	
 	  })};
 
 
@@ -152,7 +158,8 @@ exports.connect = function(req,res){
 			
 			// The user exists then modify friends list
 			doc.profilePic = req.body.profilePic;	//update profile picture
-			doc.friends = req.body.friendsList;		//update friends list
+			//doc.friends = req.body.friendsList;		//update friends list
+			doc.friends = ["11111","22222","33333","44444","55555"];		//update friends list
 			doc.save(function(err){
 				
 				if (err){
@@ -191,7 +198,8 @@ exports.connect = function(req,res){
 					lat: req.body.location.lat,
 					lng: req.body.location.lng
 				},
-				friends: req.body.friendsList
+				//friends: req.body.friendsList
+				friends: ["11111","22222","33333","44444","55555"]
 			});
 			console.log("########## Add new user: Step 1/2: Created successfully a new user model");
 			// Step 2: Save it in the database
@@ -233,7 +241,8 @@ exports.rob = function(req, res){
 		var randomSongIndex = songAvailable[randomSongIndexPtr];
 		console.log("randomSongIndex", randomSongIndex);
 		doc.mySongs[ randomSongIndex ].stolen = true;
-		doc.mySongs[ randomSongIndex ].stealTimestamp = Date.now();
+		doc.mySongs[ randomSongIndex ].stealTimestamp = req.body.stealTimestamp;
+		doc.mySongs[ randomSongIndex ].robberId = req.body.robberId;
 		doc.robbers.push(req.body.robberId);
 		doc.save();
 
@@ -341,7 +350,7 @@ exports.giveBackSong = function(req, res){
 					{userId: req.body.victimId, 'mySongs.url': req.body.song  } ,
 					{ 	'mySongs.$': 1 ,
 						$push: { 'robbersGiveBackSong' : req.body.userId },
-						$set: {'mySongs.$.stolen' : false, 'mySongs.$.stealTimestamp' : -1	} 
+						$set: {'mySongs.$.stolen' : false, 'mySongs.$.stealTimestamp' : -1, 'mySongs.$.robberId' : -1 } 
 					},
 
 					function(err, effectedDoc2){
