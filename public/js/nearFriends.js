@@ -113,7 +113,8 @@ $(document).ready(function() {
 				url : 'http://localhost:8020/rob',
 				data : {
 					robberId :  window.sessionStorage.id,
-					victimId: draggedUserId
+					victimId: draggedUserId,
+					stealTimestamp: Date.now()
 				},
 				success : function(data) {
 					if(data.success){
