@@ -3,35 +3,67 @@ var UserM =  require('../dao').UserM;
 
 //This function returns a list of songs a user stole from his friends
 exports.getSongsIStole = function(req,res){	
-	console.log('getSongsIStole() - ',req.body.userId);
-	UserM.findOne({ 'userId' : req.body.userId }, 'mySteal', function (err, doc) {
-		if (err) return res.json({success: 0});
-		if (doc.mySteal.length >0){
-			res.json({success:1, songsList: doc.mySteal});
-		}else{
-			res.json({success:2, desc:'List of songs i stole is empty'});
-		}
-	});
-};
+	var victims = {};
+	// console.log('getSongsIStole() - ',req.body.userId);
+	// UserM.findOne({ 'userId' : req.body.userId }, 'mySteal', function (err, doc) {
+	// 	if (err) return res.json({success: 0});
+		// if (doc.mySteal.length >0){
+		// 	res.json({success:1, songsList: doc.mySteal});
+		// }else{
+		// 	res.json({success:2, desc:'List of songs i stole is empty'});
+		// }
+	UserM.aggregate(
+	  {$match: {userId: req.body.userId}},
+	  {$unwind: '$mySteal'},
+	  {$group: {'_id':'$_id', 'songs': {'$push': '$mySteal'}, 'victims': {'$push' : '$mySteal.userId'} }}, function (err, doc) {
+	  	if (err) return res.json({success: 0});
+  		  	if(doc[0].songs && doc[0].victims){
+		  		UserM.find({ 'userId' : { $in : doc[0].victims } },'userId profilePic' ,function (err, victimsDoc) {
+		  			if (err) return res.json({success: 0});
+						
+						for(var i = 0; i < doc[0].victims.length; i++){
+							victims[victimsDoc[i].userId] = victimsDoc[i].profilePic;
+							
+						}
+
+						if (doc[0].songs.length >0){
+							res.json({success:1, songsList: doc[0].songs, victims: victims});
+						}else{
+							res.json({success:2, desc:'List of songs stolen from me is empty'});
+						}	
+		  		});	
+  			}
+	  });
+	};
 
 
 // This function connects to the database and returns a list of songs stolen from a user
 // and returns a songs list with response object
 exports.getSongsStolenFromMe = function(req, res){
+	var robbers = {};
 	UserM.aggregate(
 	  {$match: {userId: req.body.userId}},
 	  {$unwind: '$mySongs'},
 	  {$match: {'mySongs.stolen': true}},
-	  //{$group({'_id':'$_id','players': {'$push': '$players'}})
-	  {$group: {'_id':'$_id', 'songs': {'$push': '$mySongs'}}}, function (err, doc) {
+	  {$group: {'_id':'$_id', 'songs': {'$push': '$mySongs'}, 'robbers': {'$push' : '$mySongs.robberId'} }}, function (err, doc) {
 	  	if (err) return res.json({success: 0});
-	  	console.log('getSongsStolenFromMe= ',doc)
-	  	if (doc[0].songs.length >0){
-			res.json({success:1, songsList: doc[0].songs});
-		}else{
-			res.json({success:2, desc:'List of songs stolen from me is empty'});
-		}
-	  	
+
+	  	if(doc[0].songs && doc[0].robbers){
+		  		UserM.find({ 'userId' : { $in : doc[0].robbers } },'userId profilePic' ,function (err, robbersDoc) {
+		  			if (err) return res.json({success: 0});
+						
+						for(var i = 0; i < doc[0].robbers.length; i++){
+							robbers[robbersDoc[i].userId] = robbersDoc[i].profilePic;
+							
+						}
+
+						if (doc[0].songs.length >0){
+							res.json({success:1, songsList: doc[0].songs, robbers: robbers});
+						}else{
+							res.json({success:2, desc:'List of songs stolen from me is empty'});
+						}	
+		  		});	
+	  	}
 	  })};
 
 
@@ -88,12 +120,13 @@ exports.getRobbersOfSongsThatAreBack = function(req, res){
 	var responseData = [];
 	UserM.findOne({ 'userId' : req.body.userId }, 'robbersGiveBackSong', function (err, doc) {
 		if (err) return res.json({success: 0});
-
+		console.log("robbers give back song array: ", doc.robbersGiveBackSong);
 	// Find all robbers documents from the DB.
 	UserM.find({ 'userId' : { $in : doc.robbersGiveBackSong } }, function (err, robbersDoc) {
 					if (err) return res.json({success: 0});
 
 					for(var i = 0; i < doc.robbersGiveBackSong.length; i++){
+						console.log("### Robber's doc: ",robbersDoc[i] );
 						responseData.push({
 							robberId: robbersDoc[i].userId,
 							profilePic: robbersDoc[i].profilePic,
@@ -125,7 +158,6 @@ exports.getFriendsLocations = function(req, res){
 		console.log("he has: " + doc.friends.length + "Friends")
 
 		// Find each friend in the DB --> that really have song in 'mySongs'
-		// need to implement (the)
 		UserM.find({ 'userId' : { $in : doc.friends } }, function (err, friendDoc) {
 			if (err) return res.json({success: 0});
 			else{
