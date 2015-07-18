@@ -3,54 +3,99 @@
 	src: url("../fonts/nexa/Nexa Bold.otf");
 }
 
+@font-face {
+	font-family: Tungsten;
+	src: url("../fonts/tungsten/Tungsten-Semibold.otf");
+}
+
 html, body {
 	margin: 0px;
 	padding: 0px;
-	/*background: #303344;*/
+	background: #303344;
 }
+
 #appNavigator {
 	/*display: table;*/
 	width: 100%;
 	background: #2cf0b9;
-	height: 53px;
+	height: 75px;
 	text-align: center;
 	font-size: 16px;
 	font-family: NexaBold;
 	text-transform: uppercase;
 }
+
 #navTitle {
-	  padding-top: 15px;
+	  padding-top: 40px;
 }
 #backBtn {
 	position: absolute;
-	top: 9px;
+	top: 32px;
 	left: 8px;
 	font-family: NexaBold;
 	color: white;
 	font-size: 20px;
-
 	background-color: Transparent;
     background-repeat:no-repeat;
     border: none;
     cursor:pointer;
     overflow: hidden;
-
     outline:none;
 }
 
 #songs{
 	margin: 0 auto;
-	/*width: 400px;*/
+	padding-top: 15px;
 }
 
-#songs > section , #songs > canvas{
-	border: 1px solid #000;
-	margin-top: 10px;
-	padding: 10px;
-	text-align: center;
-}
 
 .center{
 	margin-top: 10px;
 	text-align: center;
+}
+
+.song{
+	height: 120px;
+}
+
+.songData{
+  width: 300px;
+  margin: 0 auto;
+}
+
+.circleHolder{
+	float: right;
+	display: inline-block;
+	margin-top: 20px;
+}
+
+.counterHolder{
+	float: left;
+}
+
+.hours{
+	font-family: Tungsten;
+	font-size: 83px;
+	color: #2cf0b9;
+}
+
+.minutes{
+	font-family: Tungsten;
+	font-size: 26px;
+	color: #2cf0b9;
+	margin-left: 10px;
+	position: relative;
+    bottom: 40px;
+    border-bottom: 5px solid #00ffff;
+}
+
+.hoursSymbol{
+	font-family: Tungsten;
+	font-size: 26px;
+	color: #00ffff;
+	padding-right: 5px;
+}
+
+.clear{
+	clear: both;
 }

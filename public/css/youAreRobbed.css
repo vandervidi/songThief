@@ -13,27 +13,28 @@ html, body {
 	padding: 0px;
 	background: #303344;
 }
+
 #wrapper {
 	position: relative;
 }
+
 #appNavigator {
-	display: table;
 	width: 100%;
 	background: #2cf0b9;
-	height: 53px;
+	height: 75px;
+	text-align: center;
+}
+#logoHolder{
+	padding-top: 40px;
 	text-align: center;
 }
 #logoLeft {
-	display: table-cell;
-	vertical-align: middle;
 	font-size: 18px;
 	font-family: NexaBold;
 	text-transform: uppercase;
 	text-align: right;
 }
 #logoRight {
-	display: table-cell;
-	vertical-align: middle;
 	font-size: 18px;
 	font-family: NexaLight;
 	text-transform: uppercase;
@@ -41,54 +42,66 @@ html, body {
 }
 #skipBtn {
 	position: absolute;
-	top: 12px;
+	top: 35px;
 	right: 19px;
 	font-family: NexaBold;
 	color: white;
 	font-size: 20px;
-
 	background-color: Transparent;
     background-repeat:no-repeat;
     border: none;
     cursor:pointer;
     overflow: hidden;
-
     outline:none;
 }
+
 #mainContent {
 	text-align: center;
 	color: white;
 }
+
 .sText {
 	font-family: NexaLight;
-	font-size: 20px;
+	font-size: 16px;
 }
+
 .mText {
 	font-family: NexaLight;
-	font-size: 50px;
+	font-size: 45px;
 }
+
 .lText {
 	font-family: NexaBold;
 	font-size: 50px;
 }
+
 #hello {
-	padding-top: 80.5px;
+	padding-top: 70px;
 }
+
 #youve {
-	margin-top: 32px;
+	margin-top: 25px;
 }
+
 #justBeen {
-	margin-top: 27px;
+	margin-top: 15px;
 }
+
 #robbed{
-	margin-top: 28.5px;
+	margin-top: 15px;
 }
+
 #robbers {
-	margin-top: 56.5px;
+	margin-top: 35px;
 }
+
+#robbers img {
+	width: 72px;
+	padding: 5px;
+}
+
 #songReturnText {
 	font-family: NexaBold;
-	font-size: 20px;
+	font-size: 16px;
 	margin-top: 50px;
-	margin-bottom: 96px;
 }

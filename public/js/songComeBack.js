@@ -1,6 +1,4 @@
 $(document).ready(function(){
-
-
 	$.ajax({
 		type : "POST",
 		url : 'http://localhost:8020/getRobbersOfSongsThatAreBack',
@@ -9,8 +7,10 @@ $(document).ready(function(){
 		},
 		success : function(data) {
 			if(data.success){
-				debugger
-				//need to implement..
+				console.log(data);
+				$.each(data.robbersData, function(key, robber){
+					$('#robbersPictures').append('<img src=" ' +  robber.profilePic + '">');
+				});
 			}
 		},
 		error : function(objRequest, errortype) {

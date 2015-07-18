@@ -9,25 +9,26 @@ $(document).ready(function() {
 		},
 		success : function(data) {
 			console.log(data);
-			debugger
+			
 			if (data.success==1){
 				$.each(data.songsList, function(key,song){
-					
+					// Proceed only if the time left is less then 24H
 					if ( !is24HLeft(song.stealTimestamp) ){
-						var songItem = $('<section class="song">');
+						var songItem = $('<section class="song" data-url="' + song.url + '">');
 						// Create circle
-						var circle = $('<section class="circle'+ key +'">');
+						var circle = $('<section class="circleHolder circle'+ key +'">');
 
 						// Create song data
-						var songNameArtist = $('<section class="songData" data-url="' + song.url + '" >' + song.artist + ' - '+ song.songName + '</section>');
-						var songCountDown = $('<section class="countDown'+ key +'"><span class="hours"></span><span> : </span><span class="minutes"></span></section>');
+						var songData = $('<section class="songData">');
+						var songCountDown = $('<section class="counterHolder countDown'+ key +'"><span class="hoursSymbol">H</span><span class="hours"></span><span class="minutes"></span></section>');
 						
 						countDown('countDown'+ key , song.stealTimestamp);
 						
-						songItem.append(songCountDown);
-						songItem.append(songNameArtist);
-						songItem.append(circle);
-						songItem.append(songCountDown);
+						
+						songItem.append(songData);
+						songData.append(circle);
+						songData.append(songCountDown);
+						songData.append('<div class="clear">');
 
 						// Add to the screen
 						$("#songs").append(songItem);
@@ -46,7 +47,7 @@ $(document).ready(function() {
 							 * Size of the circle / canvas in pixels
 							 * @type {number}
 							 */
-							size: 100.0,
+							size: 80.0,
 
 							/**
 							 * Initial angle for 0.0 value in radians
@@ -58,7 +59,7 @@ $(document).ready(function() {
 							 * Width of the arc. By default it's auto-calculated as 1/14 of size, but you may set it explicitly in pixels
 							 * @type {number|string}
 							 */
-							thickness: 'auto',
+							thickness: '8',
 
 							/**
 							 * Fill of the arc. You may set it to:
@@ -89,7 +90,7 @@ $(document).ready(function() {
 							 * <a href="http://www.jqueryscript.net/animation/">Animation</a> config (see jQuery animations: http://api.jquery.com/animate/)
 							 */
 							animation: {
-							  duration: 1200,
+							  duration: 800,
 							  easing: 'circleProgressEasing'
 							},
 
@@ -114,8 +115,16 @@ $(document).ready(function() {
 							 */
 							lineCap: 'butt',
 							});
-						//select the canvas and create classyloader
-						//$('.loader:last').ClassyLoader(options);
+
+						//$('.circle'+ key).append('<img src="' +  data.victims[song.userId] + '">');
+
+						$('.circle'+ key + '> canvas').css( {
+							"background-image": "url(" + data.victims[song.userId] + ")",
+							"background-size": "80px 80px",
+    						"background-repeat": "no-repeat",
+    						"background-position":" center center"  
+						});
+
 					}else {
 						// send to server this song to remove from my steal list
 						// and re-enable the song at victims songs list
@@ -156,7 +165,6 @@ function giveBackSong_reenableVictimSong(song){
 		},
 		success : function(data) {
 			if (data.success){
-				debugger
 				console.log(data);
 				
 				}
@@ -172,7 +180,6 @@ function giveBackSong_reenableVictimSong(song){
 
 function is24HLeft(timestamp){
 	// Calculate time from timestamp untill now
-	debugger
 	counterDownTime =  timeDifference( Date.now(), timestamp );
 	console.log('time passed: ',counterDownTime);
 	// If pass 48H
@@ -215,6 +222,8 @@ function timeDifference(dateNow,olderDate) {
 function countDown(element, userTs) {
 
     var interval = setInterval(function() {
+
+    	var e = element;
     	//Saving an instance of the hours and minutes elements
     	var remaningTime = (userTs + 86400000) - Date.now();
 	    var hoursElem = $('.'+element + ' .hours');
@@ -223,11 +232,10 @@ function countDown(element, userTs) {
 		//Subtracting the days from the timestamp
     	var d = Math.floor(remaningTime / 1000 / 60 / 60 / 24);
         remaningTime -= d * 1000 * 60 * 60 * 24;
-
-       
-        if(remaningTime == 0) {
-         	hoursElem.text("00");
-         	minutesElem.text("00");
+        console.log(remaningTime)
+        if(remaningTime - 60000 < 0) {
+        debugger
+         	$('.'+e).parents().eq(1).fadeOut("slow");
             clearInterval(interval);
             return;
         }

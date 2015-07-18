@@ -17,11 +17,12 @@ exports.getSongsIStole = function(req,res){
 	  {$unwind: '$mySteal'},
 	  {$group: {'_id':'$_id', 'songs': {'$push': '$mySteal'}, 'victims': {'$push' : '$mySteal.userId'} }}, function (err, doc) {
 	  	if (err) return res.json({success: 0});
-  		  	if(doc[0].songs && doc[0].victims){
+	  	console.log(doc)
+  		  	if(doc.length > 0){
 		  		UserM.find({ 'userId' : { $in : doc[0].victims } },'userId profilePic' ,function (err, victimsDoc) {
 		  			if (err) return res.json({success: 0});
-						
-						for(var i = 0; i < doc[0].victims.length; i++){
+						console.log("victimsDoc: ", victimsDoc)
+						for(var i = 0; i < victimsDoc.length; i++){
 							victims[victimsDoc[i].userId] = victimsDoc[i].profilePic;
 							
 						}
@@ -32,7 +33,9 @@ exports.getSongsIStole = function(req,res){
 							res.json({success:2, desc:'List of songs stolen from me is empty'});
 						}	
 		  		});	
-  			}
+  			}else{
+				res.json({success:2, desc:'List of songs stolen from me is empty'});
+			}	
 	  });
 	};
 

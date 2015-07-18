@@ -22,23 +22,22 @@ html, body, #gMap {
 }
 
 #appNavigator {
-	display: table;
 	width: 100%;
 	background: #2cf0b9;
-	height: 53px;
+	height: 75px;
+	text-align: center;
+}
+#logoHolder{
+	padding-top: 40px;
 	text-align: center;
 }
 #logoLeft {
-	display: table-cell;
-	vertical-align: middle;
 	font-size: 18px;
 	font-family: NexaBold;
 	text-transform: uppercase;
 	text-align: right;
 }
 #logoRight {
-	display: table-cell;
-	vertical-align: middle;
 	font-size: 18px;
 	font-family: NexaLight;
 	text-transform: uppercase;
@@ -46,31 +45,30 @@ html, body, #gMap {
 }
 #skipBtn {
 	position: absolute;
-	top: 12px;
+	top: 35px;
 	right: 19px;
 	font-family: NexaBold;
 	color: white;
 	font-size: 20px;
-
 	background-color: Transparent;
     background-repeat:no-repeat;
     border: none;
     cursor:pointer;
     overflow: hidden;
-
     outline:none;
 }
+
 #gMap {
-	height: 467px;
+	height: 435px;
 	/*visibility: hidden;*/
 }
 
 #mapOverlay {
 	width: 100%;
-	height: 467px;
+	height: 436px;
 	position: absolute;
 	background: #303344;
-	top: 53px;
+	top: 74px;
 }
 
 #droppableChest {
