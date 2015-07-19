@@ -4,14 +4,6 @@ var UserM =  require('../dao').UserM;
 //This function returns a list of songs a user stole from his friends
 exports.getSongsIStole = function(req,res){	
 	var victims = {};
-	// console.log('getSongsIStole() - ',req.body.userId);
-	// UserM.findOne({ 'userId' : req.body.userId }, 'mySteal', function (err, doc) {
-	// 	if (err) return res.json({success: 0});
-		// if (doc.mySteal.length >0){
-		// 	res.json({success:1, songsList: doc.mySteal});
-		// }else{
-		// 	res.json({success:2, desc:'List of songs i stole is empty'});
-		// }
 	UserM.aggregate(
 	  {$match: {userId: req.body.userId}},
 	  {$unwind: '$mySteal'},
@@ -70,20 +62,6 @@ exports.getSongsStolenFromMe = function(req, res){
 			}	
 	  })};
 
-
-// 	UserM.findOne({ 'userId' : req.body.userId}, 'mySongs', function (err, doc) {
-// 		if (err) return res.json({success: 0});
-
-// 		var songsStealed = [];
-// 		for (var i = 0; i < doc.mySongs.length; i++){
-// 			//console.log(doc.mySongs[i])
-// 			if (doc.mySongs[i].stolen){
-// 				songsStealed.push(doc.mySongs[i]);
-// 			}
-// 		}
-// 		res.json(songsStealed);
-// 	});
-// };
 
 // This function returns a user's robbers Facebook Id's
 exports.getRobbers = function(req, res){
@@ -302,66 +280,7 @@ exports.rob = function(req, res){
 	  			res.json({success: robberDoc});
 	  		}
 		});
-		
-
-
-		// UserM.update(
-  //   		{'userId' : req.body.robberId}, {
-  //   			$push: {
-  //   				url: doc.mySongs[ randomSongIndex].url,
-  //   				songName: doc.mySongs[ randomSongIndex].songName,
-  //   				artist: doc.mySongs[ randomSongIndex].artist,
-  //   				stealTimestamp: doc.mySongs[ randomSongIndex].stealTimeStamp,
-  //   				userId: req.body.victimId
-
-  //   			} 
-  //   		}).exec(function (err, robberDoc) {
-  //   			res.json({success: robberDoc});
-  //   			// doc.mySteal.push({
-  //   			// 	url: doc.mysongs[ randomSongIndex].url,
-  //   			// 	songName: doc.mysongs[ randomSongIndex].songName,
-  //   			// 	artist: doc.mysongs[ randomSongIndex].artist,
-  //   			// 	stealTimestamp: doc.mysongs[ randomSongIndex].stealTimeStamp,
-  //   			// 	userId: req.req.body.victimId
-
-  //   			// });
-
-		
-		// //Update
-		// //doc.save();
-
-		// });
-
-
-
-
-
-		//res.json( doc.mySongs[ randomSongIndex ]);
-		
-		//Update
-		//doc.save();
-
 	});
-
-		// // Find each friend in the DB 
-		// UserM.find({ 'userId' : { $in : doc.friends } }, function (err, friendDoc) {
-		// 	if (err) return res.json({success: 0});
-		// 	else{
-		// 		console.log(friendDoc)
-		// 		for(var i = 0; i < doc.friends.length; i++){
-		// 			responseData.push({
-		// 				friendId: friendDoc[i].userId,
-		// 				profilePic: friendDoc[i].profilePic,
-		// 				location: {
-		// 					lat: friendDoc[i].location.lat,
-		// 					lng: friendDoc[i].location.lng 
-		// 				}
-		// 			});
-		// 		}
-		// 	}
-		// 	res.json({ success: 1, friendsData: responseData });
-		// });	
-	// });
 };
 
 // This function unlocks a song that its robbery time is over, to the 

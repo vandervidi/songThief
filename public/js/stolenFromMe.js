@@ -85,9 +85,8 @@ $(document).ready(function() {
 							 *   - { color: 'lime', image: 'http://i.imgur.com/pT0i89v.png' } - color displayed until the image is loaded
 							 */
 							fill: {
-							  gradient: ['#2cf0b9', '#009bff'],
-							  gradientAngle: Math.PI / 4,
-							  color: '#FFFFF'
+							 
+							  color: '#00ffff'
 							},
 
 							/**
@@ -129,7 +128,7 @@ $(document).ready(function() {
 						//$('.circle'+ key).append('<img src="' +  data.victims[song.userId] + '">');
 
 						$('.circle'+ key + '> canvas').css( {
-							"background-image": "url(" + data.victims[song.userId] + ")",
+							"background-image": "url(" + data.robbers[song.robberId] + ")",
 							"background-size": "80px 80px",
     						"background-repeat": "no-repeat",
     						"background-position":" center center"  
