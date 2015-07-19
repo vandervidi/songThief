@@ -160,7 +160,7 @@ $(document).ready(function() {
 
 	// Bind the swipeHandler callback function to the swipe event on div.box
 	// on 'swipe-right'
-	$("body").on( "swipeleft", function ( event ){
+	$("body").on( "swiperight", function ( event ){
 		window.location.href = "stolenFromMe.html";
 	});
 

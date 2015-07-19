@@ -153,13 +153,13 @@ $(document).ready(function() {
 
 
 	$('#backBtn').click(function(){
-		window.location.href = "nearFriends.html";
+		window.location.href = "myLoot.html";
 	});
 
 	// Bind the swipeHandler callback function to the swipe event on div.box
 	// on 'swipe-right'
 	$("body").on( "swipeleft", function ( event ){
-		window.location.href = "stolenFromMe.html";
+		window.location.href = "myLoot.html";
 	});
 
 	$("#play").click(function(){
