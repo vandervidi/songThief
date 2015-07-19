@@ -6,8 +6,8 @@ var bodyParser = require('body-parser');
 var url = require('url');
 var app = express();
 //app.use(express.static(process.cwd() + '/public')).listen(process.env.PORT || 8020);
-//app.listen(process.env.PORT || 8020);
-app.set('port', (process.env.PORT || 5000));
+app.listen(process.env.PORT || 5000);
+//app.set('port', (process.env.PORT || 5000));
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
@@ -60,4 +60,3 @@ app.post('/canRob', users.canRob, function(req, res){
 app.post('/getRobbersOfSongsThatAreBack', users.getRobbersOfSongsThatAreBack, function(req, res){	
 });
 
-console.log('listening on port '+8020);
