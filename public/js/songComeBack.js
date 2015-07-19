@@ -1,7 +1,7 @@
 $(document).ready(function(){
 	$.ajax({
 		type : "POST",
-		url : 'http://localhost:8020/getRobbersOfSongsThatAreBack',
+		url : 'https://songthief.herokuapp.com/getRobbersOfSongsThatAreBack',
 		data : {
 			userId :  window.sessionStorage.id
 		},

@@ -4,7 +4,7 @@ var counterDownTime;  //This will hold the remaining time left counter of a song
 $(document).ready(function() {
 	$.ajax({
 		type : "POST",
-		url : 'http://localhost:8020/songsStolenFromMe',
+		url : 'https://songthief.herokuapp.com/songsStolenFromMe',
 		data : {
 			userId : userId
 		},
@@ -76,9 +76,7 @@ $(document).ready(function() {
 							 *   - { color: 'lime', image: 'http://i.imgur.com/pT0i89v.png' } - color displayed until the image is loaded
 							 */
 							fill: {
-							  gradient: ['#2cf0b9', '#009bff'],
-							  gradientAngle: Math.PI / 4,
-							  color: '#FFFFF'
+							  color: '#00ffff'
 							},
 
 							/**
@@ -158,7 +156,7 @@ function giveBackSong_reenableVictimSong(song){
 	console.log('song.userId ',song.userId);
 	$.ajax({
 		type : "POST",
-		url : 'http://localhost:8020/giveBackSong',
+		url : 'https://songthief.herokuapp.com/giveBackSong',
 		data : {
 			userId : song.robberId,
 			song : song.url,

@@ -1,9 +1,20 @@
-var userId = window.sessionStorage.id;
+var userId = window.sessionStorage.id,
+	player;
 var counterDownTime;  //This will hold the remaining time left counter of a song
+
+
+
 $(document).ready(function() {
+			// 2. This code loads the IFrame Player API code asynchronously.
+	var tag = document.createElement('script');
+
+	tag.src = "https://www.youtube.com/iframe_api";
+	var firstScriptTag = document.getElementsByTagName('script')[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
 	$.ajax({
 		type : "POST",
-		url : 'http://localhost:8020/songsIStole',
+		url : 'https://songthief.herokuapp.com/songsIStole',
 		data : {
 			userId : userId
 		},
@@ -134,11 +145,14 @@ $(document).ready(function() {
 			}else{
 				console.log(data.desc);
 			}
+
 		},
 		error : function(objRequest, errortype) {
 			console.log("Cannot get followd users Json");
 		}
 	});
+
+
 
 	$('#backBtn').click(function(){
 		window.location.href = "nearFriends.html";
@@ -149,29 +163,86 @@ $(document).ready(function() {
 	$("body").on( "swipeleft", function ( event ){
 		window.location.href = "stolenFromMe.html";
 	});
+
+	$("#play").click(function(){
+		var $span = $(" > span", this)[0];
+		console.log($span);
+		if ($($span).hasClass("glyphicon-play")){
+			$($span).removeClass("glyphicon-play").addClass("glyphicon-pause");
+			player.pauseVideo();
+		}else if ($($span).hasClass("glyphicon-pause")){
+			$($span).removeClass("glyphicon-pause").addClass("glyphicon-play");
+			player.playVideo();
+		}
+	});
+
+	//&("#play > span").removeClass("glyphicon-play").addClass("glyphicon-pause");
+
 });
 
-function playSong(e){
-	if ( $('#player').css('display') == 'none' ){
-		//hide screensFlow circles
-		$('#screensFlow').hide('slow');
-		//reveal player
-		$('#player').show( 2000 )
-		console.log('play song: ', e.dataset.url);
-	}else {
-		//hide player
-		$('#player').hide('slow');
-		//reveal active page circles
-		$('#screensFlow').show( 2000 )
-	}
+
+// 3. This function creates an <iframe> (and YouTube player)
+//    after the API code downloads.
+
+function onYouTubeIframeAPIReady() {
+	  player = new YT.Player('player', {
+	  height: '130',
+	  width: '130',
+	  autoplay: 0,
+	  events: {
+	    'onReady': onPlayerReady,
+	    'onStateChange': onPlayerStateChange
+	  }
+	});
 }
+
+// 4. The API will call this function when the video player is ready.
+function onPlayerReady(event) {
+	event.target.playVideo();
+}
+
+// 5. The API calls this function when the player's state changes.
+//    The function indicates that when playing a video (state=1),
+//    the player should play for six seconds and then stop.
+
+function onPlayerStateChange(event) {
+}
+
+function stopVideo() {
+	player.stopVideo();
+}
+
+function playSong(e){
+	// if ( $('#player').css('display') == 'none' ){
+		//hide screensFlow circles
+		debugger
+		var s = e.dataset.url;
+		s = s.split('=');
+		s = s[1];
+
+		$('#screensFlow').fadeOut(500);
+		//reveal player
+		$('#playerControlls').fadeIn( 1000 );
+		$('#songs').css("padding-bottom", "80px");
+		console.log('play song: ', e.dataset.url);
+		//load the song url to thwe player
+		player.loadVideoById({'videoId': s});
+	// }else {
+	// 	//hide player
+	// 	$('#player').fadeOut(500);
+	// 	//reveal active page circles
+	// 	$('#screensFlow').fadeIn( 2000 );
+	// }
+}
+
+
 
 //This function re-enables victim's stolen song.
 function giveBackSong_reenableVictimSong(song){
 	console.log('song.userId ',song.userId);
 	$.ajax({
 		type : "POST",
-		url : 'http://localhost:8020/giveBackSong',
+		url : 'https://songthief.herokuapp.com/giveBackSong',
 		data : {
 			userId : userId,
 			song : song.url,
@@ -211,30 +282,29 @@ function calcPercentOfSecondsFrom24H(timestamp){
 
 // This function returns the difference between two timestamps
 function timeDifference(dateNow,olderDate) {
-        var difference = dateNow - olderDate;
+    var difference = dateNow - olderDate;
 
-        var daysDifference = Math.floor(difference/1000/60/60/24);
-        difference -= daysDifference*1000*60*60*24
+    var daysDifference = Math.floor(difference/1000/60/60/24);
+    difference -= daysDifference*1000*60*60*24
 
-       var hoursDifference = Math.floor(difference/1000/60/60);
-        difference -= hoursDifference*1000*60*60
+   var hoursDifference = Math.floor(difference/1000/60/60);
+    difference -= hoursDifference*1000*60*60
 
-        var minutesDifference = Math.floor(difference/1000/60);
-        difference -= minutesDifference*1000*60
+    var minutesDifference = Math.floor(difference/1000/60);
+    difference -= minutesDifference*1000*60
 
-        var secondsDifference = Math.floor(difference/1000);
+    var secondsDifference = Math.floor(difference/1000);
 
-		return {
-			days: daysDifference,
-			hours: hoursDifference,
-			minutes: minutesDifference,
-			seconds: secondsDifference
-		};
+	return {
+		days: daysDifference,
+		hours: hoursDifference,
+		minutes: minutesDifference,
+		seconds: secondsDifference
+	};
 }
 
 
 function countDown(element, userTs) {
-
     var interval = setInterval(function() {
 
     	var e = element;
@@ -268,3 +338,6 @@ function countDown(element, userTs) {
 
     }, 1000);
 }
+
+
+

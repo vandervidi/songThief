@@ -3,7 +3,7 @@ $(document).ready(function() {
 	window.fbAsyncInit = function() {
 		$.ajax({
 			type : "POST",
-			url : 'http://localhost:8020/getAppId',
+			url : 'https://songthief.herokuapp.com/getAppId',
 			success : function(data) {
 				console.log(data.appId);
 				FB.init({
@@ -58,7 +58,7 @@ function saveUserData(userId, profilePic, friendsListFb) {
 
 	$.ajax({
 		type : "POST",
-		url : 'http://localhost:8020/connect',
+		url : 'https://songthief.herokuapp.com/connect',
 		data : {
 			userId : userId,
 			profilePic : profilePic,

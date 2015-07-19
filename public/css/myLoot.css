@@ -16,6 +16,10 @@ html, body {
 #wrapper {
 	height: 700px;
 }
+
+main{
+	min-height: 650px;
+}
 #appNavigator {
 	/*display: table;*/
 	width: 100%;
@@ -63,7 +67,7 @@ html, body {
 }
 
 .songData{
-  width: 300px;
+  width: 250px;
   margin: 0 auto;
 }
 
@@ -101,12 +105,9 @@ html, body {
 }
 
 #screensFlow {
-  	width: 70px;
+  	width: 35px;
   	margin: 0 auto;
-
-  	bottom: 5%;
-  	position: absolute;
-  	left: 42.5%;
+  	left: 48%;
 }
 
 .active{
@@ -116,14 +117,14 @@ html, body {
 	float:left;
 }
 .left {
-	padding-right: 13px;
+	margin-right: 7px;
 }
 .right {
 }
 
 
 /********* player *********/
-#player {
+#playerControlls {
 	width: 100%;
 	bottom: 0;
 	position: fixed;
@@ -137,6 +138,7 @@ html, body {
   	display: flex;
 }
 .controlsBtn {
+	width:33.3%;
 	padding-right: 12%;
  	padding-left: 12%;
   	display: table-cell;
@@ -149,8 +151,23 @@ html, body {
 #next{
 }
 
+#screensFlow img{
+	width: 14px;
+	height: 14px;
+}
 
+#screensFlowWrapper{
+	padding-bottom: 30px;
+}
 
 .clear{
 	clear: both;
+}
+
+.ui-loader ,.ui-loader-default{
+	display: none !important;
+}
+
+#player{
+	display: none;
 }

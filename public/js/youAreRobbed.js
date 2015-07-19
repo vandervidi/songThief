@@ -2,7 +2,7 @@ $(document).ready(function() {
 	// Get Robbers picture link
 	$.ajax({
 		type : "POST",
-		url : 'http://localhost:8020/getRobbers',
+		url : 'https://songthief.herokuapp.com/getRobbers',
 		data : {
 			userId : window.sessionStorage.id,
 		},

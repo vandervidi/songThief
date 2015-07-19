@@ -32,7 +32,7 @@ function initialize() {
 
 		$.ajax({
 			type : "POST",
-			url : 'http://localhost:8020/getFriendsLocations',
+			url : 'https://songthief.herokuapp.com/getFriendsLocations',
 			data : {
 				userId : window.sessionStorage.id,
 			},
@@ -110,7 +110,7 @@ $(document).ready(function() {
 
 			$.ajax({
 				type : "POST",
-				url : 'http://localhost:8020/rob',
+				url : 'https://songthief.herokuapp.com/rob',
 				data : {
 					robberId :  window.sessionStorage.id,
 					victimId: draggedUserId,
