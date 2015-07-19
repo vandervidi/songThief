@@ -13,7 +13,9 @@ html, body {
 	padding: 0px;
 	background: #303344;
 }
-
+#wrapper {
+	height: 700px;
+}
 #appNavigator {
 	/*display: table;*/
 	width: 100%;
@@ -32,6 +34,8 @@ html, body {
 	position: absolute;
 	top: 32px;
 	left: 8px;
+}
+.transparentBtn {
 	font-family: NexaBold;
 	color: white;
 	font-size: 20px;
@@ -95,6 +99,57 @@ html, body {
 	color: #00ffff;
 	padding-right: 5px;
 }
+
+#screensFlow {
+  	width: 70px;
+  	margin: 0 auto;
+
+  	bottom: 5%;
+  	position: absolute;
+  	left: 42.5%;
+}
+
+.active{
+	float:left;
+}
+.inactive{
+	float:left;
+}
+.left {
+	padding-right: 13px;
+}
+.right {
+}
+
+
+/********* player *********/
+#player {
+	width: 100%;
+	bottom: 0;
+	position: fixed;
+}
+#slider {
+	width: 100%;
+}
+#controls {
+	/* height: 75px; */
+  	background-color: #2cf0b9;
+  	display: flex;
+}
+.controlsBtn {
+	padding-right: 12%;
+ 	padding-left: 12%;
+  	display: table-cell;
+  	font-size: 43px;
+}
+#prev {
+}
+#play{
+}
+#next{
+}
+
+
 
 .clear{
 	clear: both;

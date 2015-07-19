@@ -50,23 +50,26 @@ exports.getSongsStolenFromMe = function(req, res){
 	  {$match: {'mySongs.stolen': true}},
 	  {$group: {'_id':'$_id', 'songs': {'$push': '$mySongs'}, 'robbers': {'$push' : '$mySongs.robberId'} }}, function (err, doc) {
 	  	if (err) return res.json({success: 0});
-
-	  	if(doc[0].songs && doc[0].robbers){
-		  		UserM.find({ 'userId' : { $in : doc[0].robbers } },'userId profilePic' ,function (err, robbersDoc) {
-		  			if (err) return res.json({success: 0});
-						
-						for(var i = 0; i < doc[0].robbers.length; i++){
-							robbers[robbersDoc[i].userId] = robbersDoc[i].profilePic;
+	  	if(doc.length > 0){
+		  	if(doc[0].songs && doc[0].robbers){
+			  		UserM.find({ 'userId' : { $in : doc[0].robbers } },'userId profilePic' ,function (err, robbersDoc) {
+			  			if (err) return res.json({success: 0});
 							
-						}
+							for(var i = 0; i < doc[0].robbers.length; i++){
+								robbers[robbersDoc[i].userId] = robbersDoc[i].profilePic;
+								
+							}
 
-						if (doc[0].songs.length >0){
-							res.json({success:1, songsList: doc[0].songs, robbers: robbers});
-						}else{
-							res.json({success:2, desc:'List of songs stolen from me is empty'});
-						}	
-		  		});	
-	  	}
+							if (doc[0].songs.length >0){
+								res.json({success:1, songsList: doc[0].songs, robbers: robbers});
+							}else{
+								res.json({success:2, desc:'List of songs stolen from me is empty'});
+							}	
+			  		});	
+		  	}
+		}else{
+			res.json({success:2, desc:'List of songs stolen from me is empty'});
+		}
 	  })};
 
 
@@ -124,30 +127,31 @@ exports.getRobbersOfSongsThatAreBack = function(req, res){
 	UserM.findOne({ 'userId' : req.body.userId }, 'robbersGiveBackSong', function (err, doc) {
 		if (err) return res.json({success: 0});
 		console.log("robbers give back song array: ", doc.robbersGiveBackSong);
-	// Find all robbers documents from the DB.
-	UserM.find({ 'userId' : { $in : doc.robbersGiveBackSong } }, function (err, robbersDoc) {
-					if (err) return res.json({success: 0});
+		
+		// Find all robbers documents from the DB.
+		UserM.find({ 'userId' : { $in : doc.robbersGiveBackSong } }, function (err, robbersDoc) {
+			if (err) return res.json({success: 0});
 
-					for(var i = 0; i < doc.robbersGiveBackSong.length; i++){
-						console.log("### Robber's doc: ",robbersDoc[i] );
-						responseData.push({
-							robberId: robbersDoc[i].userId,
-							profilePic: robbersDoc[i].profilePic,
-						});
-					}
-					
-					//This is used to configure proper navigation in the robbery notifications page
-					if(doc.robbersGiveBackSong.length > 0)
-						songsAreBack = true;
-					else
-						songsAreBack = false;
-
-					//Reset the array
-					doc.robbersGiveBackSong = [];
-					doc.save();
-
-					res.json({ success: 1, robbersData: responseData, songsAreBack: songsAreBack });
+			for(var i = 0; i < doc.robbersGiveBackSong.length; i++){
+				console.log("### Robber's doc: ",robbersDoc[i] );
+				responseData.push({
+					robberId: robbersDoc[i].userId,
+					profilePic: robbersDoc[i].profilePic,
 				});
+			}
+			
+			//This is used to configure proper navigation in the robbery notifications page
+			if(doc.robbersGiveBackSong.length > 0)
+				songsAreBack = true;
+			else
+				songsAreBack = false;
+
+			//Reset the array
+			doc.robbersGiveBackSong = [];
+			doc.save();
+
+			res.json({ success: 1, robbersData: responseData, songsAreBack: songsAreBack });
+		});
 	});
 };
 
@@ -278,7 +282,9 @@ exports.rob = function(req, res){
 		doc.mySongs[ randomSongIndex ].stolen = true;
 		doc.mySongs[ randomSongIndex ].stealTimestamp = req.body.stealTimestamp;
 		doc.mySongs[ randomSongIndex ].robberId = req.body.robberId;
-		doc.robbers.push(req.body.robberId);
+		if (doc.robbers.indexOf(req.body.robberId) == -1){
+			doc.robbers.push(req.body.robberId);
+		}
 		doc.save();
 
 
@@ -384,7 +390,7 @@ exports.giveBackSong = function(req, res){
 				UserM.update(
 					{userId: req.body.victimId, 'mySongs.url': req.body.song  } ,
 					{ 	'mySongs.$': 1 ,
-						$push: { 'robbersGiveBackSong' : req.body.userId },
+						$addToSet: { robbersGiveBackSong : req.body.userId },
 						$set: {'mySongs.$.stolen' : false, 'mySongs.$.stealTimestamp' : -1, 'mySongs.$.robberId' : -1 } 
 					},
 

@@ -14,7 +14,7 @@ $(document).ready(function() {
 				$.each(data.songsList, function(key,song){
 					// Proceed only if the time left is less then 24H
 					if ( !is24HLeft(song.stealTimestamp) ){
-						var songItem = $('<section class="song" data-url="' + song.url + '">');
+						var songItem = $('<section class="song" onclick="playSong(this)" data-url="' + song.url + '">');
 						// Create circle
 						var circle = $('<section class="circleHolder circle'+ key +'">');
 
@@ -146,11 +146,25 @@ $(document).ready(function() {
 
 	// Bind the swipeHandler callback function to the swipe event on div.box
 	// on 'swipe-right'
-	$("body").on( "swiperight", function ( event ){
+	$("body").on( "swipeleft", function ( event ){
 		window.location.href = "stolenFromMe.html";
 	});
 });
 
+function playSong(e){
+	if ( $('#player').css('display') == 'none' ){
+		//hide screensFlow circles
+		$('#screensFlow').hide('slow');
+		//reveal player
+		$('#player').show( 2000 )
+		console.log('play song: ', e.dataset.url);
+	}else {
+		//hide player
+		$('#player').hide('slow');
+		//reveal active page circles
+		$('#screensFlow').show( 2000 )
+	}
+}
 
 //This function re-enables victim's stolen song.
 function giveBackSong_reenableVictimSong(song){
