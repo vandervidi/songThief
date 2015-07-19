@@ -215,7 +215,6 @@ function stopVideo() {
 function playSong(e){
 	// if ( $('#player').css('display') == 'none' ){
 		//hide screensFlow circles
-		debugger
 		var s = e.dataset.url;
 		s = s.split('=');
 		s = s[1];
@@ -318,7 +317,7 @@ function countDown(element, userTs) {
         remaningTime -= d * 1000 * 60 * 60 * 24;
         console.log(remaningTime)
         if(remaningTime - 60000 < 0) {
-        debugger
+        
          	$('.'+e).parents().eq(1).fadeOut("slow");
             clearInterval(interval);
             return;

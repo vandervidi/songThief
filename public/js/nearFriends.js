@@ -42,7 +42,6 @@ function initialize() {
 
 					var marker;
 					$.each(data.friendsData, function(key, val) {
-						debugger
 						pixel = new google.maps.LatLng(val.location.lat, val.location.lng);
 						marker = new google.maps.Marker({
 							position : pixel,
@@ -118,7 +117,6 @@ $(document).ready(function() {
 				},
 				success : function(data) {
 					if(data.success){
-						debugger
 						window.location.href = "timeToRun.html";
 						}
 				},
