@@ -71,6 +71,7 @@ function saveUserData(userId, profilePic, friendsListFb) {
 		success : function(data) {
 			console.log('data: ', data);
 			if (data.success) {
+				
 				//Save logged-in user facebook Id in local sessionStorage
 				window.sessionStorage.setItem("id", userId);
 
@@ -81,7 +82,6 @@ function saveUserData(userId, profilePic, friendsListFb) {
 				 *  2) User was not robbed since his last login but the are songs that are back from on of his previous robbers
 				 * 	3) The user was not robbed and has not songs that are back - Redirect to the page that allows him to start robbing his friends
 				 */
-				debugger
 				if (data.isRobbed)
 					//Case 1
 					window.location.href = "youAreRobbed.html";

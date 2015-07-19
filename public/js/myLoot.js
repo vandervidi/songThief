@@ -315,7 +315,7 @@ function countDown(element, userTs) {
 		//Subtracting the days from the timestamp
     	var d = Math.floor(remaningTime / 1000 / 60 / 60 / 24);
         remaningTime -= d * 1000 * 60 * 60 * 24;
-        console.log(remaningTime)
+        
         if(remaningTime - 60000 < 0) {
         
          	$('.'+e).parents().eq(1).fadeOut("slow");
