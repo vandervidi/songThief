@@ -5,21 +5,14 @@ var users = require('./users');
 var bodyParser = require('body-parser');
 var url = require('url');
 var app = express();
-//app.use(express.static(process.cwd() + '/public')).listen(process.env.PORT || 8020);
-app.listen(process.env.PORT || 5000);
+app.use(express.static(process.cwd() + '/public')).listen(process.env.PORT || 5000);
+//app.listen(process.env.PORT || 5000);
 //app.set('port', (process.env.PORT || 5000));
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
 
-
-app.use(function(req,res,next){
-	//headers
-	res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-	next();
-});
 
 app.use(function(req,res,next){
 	//Setting headers for external requests
