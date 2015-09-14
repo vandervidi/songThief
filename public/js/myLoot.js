@@ -104,8 +104,8 @@ $(document).ready(function() {
 							 */
 							emptyFill : {
 								gradient : ['#2cf0b9', '#009bff'],
-								gradientAngle : Math.PI / 4,
-								color : '#FFFFF'
+								gradientAngle : Math.PI / 4
+								
 							},
 
 							/**
