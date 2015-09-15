@@ -96,17 +96,17 @@ $(document).ready(function() {
 							 *   - { image: imageObject }
 							 *   - { color: 'lime', image: 'http://i.imgur.com/pT0i89v.png' } - color displayed until the image is loaded
 							 */
-							fill :  '#FFFFF',
+							fill : {
+								gradient : ['#2cf0b9', '#009bff'],
+								gradientAngle : Math.PI / 4,
+								color : '#FFFFF'
+							},
 
 							/**
 							 * Color of the "empty" arc. Only a color fill supported by now
 							 * @type {string}
 							 */
-							emptyFill : {
-								gradient : ['#2cf0b9', '#009bff'],
-								gradientAngle : Math.PI / 4
-								
-							},
+							emptyFill : '#FFFFF',
 
 							/**
 							 * <a href="http://www.jqueryscript.net/animation/">Animation</a> config (see jQuery animations: http://api.jquery.com/animate/)
