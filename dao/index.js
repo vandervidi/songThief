@@ -1,8 +1,7 @@
 var mongoose = require('mongoose');
 
 //configuring connection to mongoLab
-// mongoose.connect('mongodb://admin:1234@ds043942.mongolab.com:43942/songthief');
-   mongoose.connect('mongodb://admin:1234@ds045598.mongolab.com:45598/heroku_lhsdxkjk');
+ mongoose.connect('mongodb://admin:1234@ds043942.mongolab.com:43942/songthief');
 
 //import schema module
 var userSchema = require('./userSchema').userSchema;
