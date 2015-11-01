@@ -164,26 +164,21 @@ exports.getFriendsLocations = function(req, res){
 // are valid.
 exports.connect = function(req,res){
 	
-	console.log('connect()');
-
 	UserM.findOne({ userId: req.body.userId}, function (err, doc){
 		if (err) return res.json({success: 0});
 		if (!!doc){
 			
 			// The user exists then modify friends list
 			doc.profilePic = req.body.profilePic;	//update profile picture
-			//doc.friends = req.body.friendsList;		//update friends list
-			doc.friends = ["11111","22222","33333","44444","55555"];		//update friends list
+			doc.friends = ["11111","22222","33333","44444","55555"];		//update friends list (Static friends)
 			doc.save(function(err){
-				
 				if (err){
 					console.log("########## Could not modify user. ERROR: ", err);
 					res.json({success: 0, desc: "Could not modify user"});
 				}
-				
 			});
+			
 			console.log("########## User is modified");
-
 
 			var songAreBackStatus,robbedStatus;
 			// if there are any songs that came back from robbery then songsAreBack == true.
@@ -222,7 +217,6 @@ exports.connect = function(req,res){
 		  		else{
 		  			console.log("########## Add new user: Step 2/2: Saved the user in the database");
 		  			res.json({success: 1});
-
 		  		}
 			});
 	  	}

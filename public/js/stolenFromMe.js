@@ -81,6 +81,7 @@ $(document).ready(function() {
 							 *   - { color: 'lime', image: 'http://i.imgur.com/pT0i89v.png' } - color displayed until the image is loaded
 							 */
 							fill : {
+
 								color : '#FFFFF'
 							},
 
