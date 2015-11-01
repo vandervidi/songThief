@@ -20,6 +20,7 @@ html, body {
 main {
 	min-height: 650px;
 }
+
 #appNavigator {
 	display: table;
 	width: 100%;
@@ -147,6 +148,10 @@ main {
 	padding-left: 12%;
 	display: table-cell;
 	font-size: 43px;
+}
+
+.controlsBtn .glyphicon{
+	top: 8px !important;
 }
 
 #screensFlow img {
